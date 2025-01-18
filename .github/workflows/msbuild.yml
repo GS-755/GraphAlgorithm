@@ -1,9 +1,10 @@
 name: github-ci
 
-on: 
-  - push  
-  - pull_request:
-      branches: [ main ]
+on:
+  push:
+    branches: [ DEVELOP ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
@@ -18,3 +19,4 @@ jobs:
 
     - name: Build solution
       run: msbuild /p:Configuration=Debug
+
