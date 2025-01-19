@@ -50,8 +50,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Assets\Buoi2\AdjecencyList.inp" />
     <None Include="Assets\Buoi2\AdjecencyMatrix.inp" />
     <None Include="Assets\Buoi2\BacVaoRa.inp" />
+    <None Include="Assets\Buoi2\EdgeList.inp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
