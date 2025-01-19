@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace ConsoleApp1.BaiTap
 {
@@ -65,7 +67,39 @@ namespace ConsoleApp1.BaiTap
         }
         static void Bai3()
         {
-
+            // Đọc input ma trận 
+            string inpFilePath = "..\\..\\Assets\\Buoi2\\AdjecencyList.inp";
+            string outFilePath = "..\\..\\Assets\\Buoi2\\AdjecencyList.out";
+            Helper.ReadMatrix(inpFilePath);
+            // Lấy dữ liệu từ Helper
+            int[,] matrix = Helper.ArrayMatrix;
+            int row = Helper.Row; 
+            int col = Helper.Col;   
+            int numOfVerticles = Helper.NumOfVerticles;
+            List<int> degreeOfVertices = new List<int>();
+            for (int i = 0; i < row; i++)
+            {
+                List<int> degreeData = new List<int>(); 
+                for (int j = 0; j < col; j++)
+                {
+                    if(matrix[i, j] > 0)
+                    {
+                        degreeData.Add(matrix[i, j]);
+                    }
+                }
+                int degreeVal = degreeData.Count;
+                degreeOfVertices.Add(degreeVal);
+            }
+            // In kết quả bài làm 
+            using (StreamWriter sw = new StreamWriter(outFilePath))
+            {
+                sw.WriteLine(numOfVerticles);
+                foreach(int degreeVal in degreeOfVertices)
+                {
+                    sw.Write($"{degreeVal} ");
+                }
+                sw.WriteLine();
+            }
         }
         static void Bai4()
         {
@@ -75,7 +109,7 @@ namespace ConsoleApp1.BaiTap
         {
             Bai1();
             Bai2();
-            //Bai3();
+            Bai3();
             //Bai4();
         }
         static int[] DegreeOfVertices(int numOfVerticles, int[,] matrix)

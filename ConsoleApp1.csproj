@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Assets\Buoi2\AdjecencyList.inp" />
     <None Include="Assets\Buoi2\AdjecencyMatrix.inp" />
     <None Include="Assets\Buoi2\BacVaoRa.inp" />
   </ItemGroup>

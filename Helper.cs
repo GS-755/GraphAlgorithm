@@ -56,8 +56,15 @@ namespace ConsoleApp1
             int len = lines.Length;
             for(int i = 1; i < len; i++)
             {
+                if(string.IsNullOrEmpty(lines[i]))
+                {
+                    Console.WriteLine($"Text Data line #{i} Invalid");
+                    continue;
+                }
                 string[] line = lines[i].Trim().Split(' ');
-                for (int j = 0; j < len - 1; j++)
+                // Sub-line length 
+                int subLineLength = line.Length;
+                for (int j = 0; j < subLineLength; j++)
                 {
                     string data = line[j];
                     if (string.IsNullOrEmpty(data))
