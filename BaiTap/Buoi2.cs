@@ -242,17 +242,19 @@ namespace ConsoleApp1.BaiTap
             int row = matrix.GetLength(0); 
             int col = matrix.GetLength(1);
             Dictionary<int, int> edgeListDegree = new Dictionary<int, int>();
+            /* Loop ma trận & cast đỉnh vào HashMap để tính bậc */
             for (int i = 0; i < row; i++)
             {
                 for (int j = 0; j < col; j++)
                 {
                     int data = matrix[i, j];
+                    /* Trường hợp đỉnh cô lập (đỉnh có giá trị = 0) */
                     if (data == 0)
                     {
                         continue;
                     }
                     /* Đỉnh chưa thêm vào ds đếm bậc:
-                    Init data với key unique - value = 1 */
+                    Init data với key_unique = data(matrix[i,j]) && bậc = 1 */
                     if (!edgeListDegree.ContainsKey(data))
                     {
                         edgeListDegree.Add(data, 1);
