@@ -26,6 +26,7 @@ namespace ConsoleApp1.BaiTap
             // Xuất kết quả bài 1 
             using (StreamWriter sw = new StreamWriter(outFilePath))
             {
+                // Xuất số đỉnh 
                 sw.WriteLine(numOfVerticles);
                 int adjLstLength = adjacencyLst.Length;
                 for (int i = 0; i < adjLstLength; i++)
@@ -35,11 +36,13 @@ namespace ConsoleApp1.BaiTap
                     {
                         continue;
                     }
+                    // Loop & Xuất danh sách kề 
                     int lstItemCount = adjacencyLstItems.Count;
                     for(int j = 0; j < lstItemCount; j++)
                     {
                         sw.Write($"{adjacencyLstItems[j]} ");
                     }
+                    // Kết thúc xuống dòng nếu vòng lặp đã đi đến cuối (loại bỏ \n bị dư)
                     if(i != adjLstLength - 1)
                     {
                         sw.WriteLine();
