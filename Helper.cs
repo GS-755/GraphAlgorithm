@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 
 namespace ConsoleApp1
 {
@@ -132,6 +133,60 @@ namespace ConsoleApp1
             Console.WriteLine();
 
             return true; 
+        }
+        /// <summary>
+        /// Convert Danh sách cạnh => Danh sách kề
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <param name="numOfEdges"></param>
+        /// <param name="numOfVertices"></param>
+        /// <returns>Danh sách kề theo định dạng Mảng danh sách số nguyên</returns>
+        public static List<int>[] ConvertEdgeListToAdjacency(int[,] matrix, int numOfVertices, int numOfEdges)
+        {
+            if(matrix == null)
+            {
+                Console.WriteLine("Helper.ConvertEdgeListToAdjacency() Invalid params!");
+                return null;
+            }
+            int rowSize = matrix.GetLength(0);
+            if(rowSize != numOfEdges)
+            {
+                Console.WriteLine("Helper.ConvertEdgeListToAdjacency() Invalid data format!");
+                return null;
+            }
+            // Khai báo List lưu trữ ds cạnh 
+            List<int>[] adjList = null;
+            try
+            {
+                adjList = new List<int>[numOfEdges + 1];
+                // Loop & init các cạnh theo danh sách số nguyên 
+                // Loop từ 1 để?
+                for (int i = 1; i <= numOfEdges; i++)
+                {
+                    adjList[i] = new List<int>();
+                }
+                // Loop các cạnh & add các cạnh vào danh sách đã init 
+                // Loop theo số đỉnh 
+                for (int i = 0; i <= NumOfVerticles; i++)
+                {
+                    int startVertice = matrix[i, 0];
+                    int endVertice = matrix[i, 1];
+                    adjList[startVertice].Add(endVertice);
+                    adjList[endVertice].Add(startVertice);
+                }
+                // Loop các danh sách cạnh đã init & sort lại giá trị bên trong danh sách 
+                for (int i = 1; i <= NumOfEdges; i++)
+                {
+                    adjList[i].Sort();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Helper.ConvertEdgeListToAdjacency() uncaught exception: "); 
+                Console.WriteLine(ex.Message);
+            }
+
+            return adjList;
         }
     }
 }
