@@ -2,7 +2,7 @@ name: github-ci
 
 on:
   push:
-    branches: [ Buoi*/** ]
+    branches: [ Buoi* ]
   pull_request:
     branches: [ DEVELOP ]
 
