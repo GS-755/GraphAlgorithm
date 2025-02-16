@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using ConsoleApp1.Models;
 
 namespace ConsoleApp1.BaiTap
 {
@@ -50,9 +51,39 @@ namespace ConsoleApp1.BaiTap
                 }
             }
         }
+        static void Bai2()
+        {
+            // Đọc input ma trận 
+            string inpFilePath = "..\\..\\Assets\\Buoi3\\Ke2Canh.inp";
+            string outFilePath = "..\\..\\Assets\\Buoi3\\Ke2Canh.out";
+            bool handleInputStatus = Helper.ReadMatrix(inpFilePath);
+            if (handleInputStatus == false)
+            {
+                Console.WriteLine("Buoi3.Bai2() Invalid input data!");
+                return;
+            }
+            // Lấy dữ liệu từ Helper
+            int[,] matrix = Helper.ArrayMatrix;
+            int numOfVerticles = Helper.NumOfVerticles;
+            // Convert Danh sách kề sang Danh sách cạnh
+            List<Edge> edgeLst = Helper.ConvertAdjacencyToEdgeList(matrix, numOfVerticles);
+            // Xuất kết quả bài 2 ra output
+            using (StreamWriter sw = new StreamWriter(outFilePath))
+            {
+                // In số đỉnh & số cạnh 
+                int edgeLstCnt = edgeLst.Count;
+                sw.WriteLine($"{numOfVerticles} {edgeLstCnt}");
+                // In danh sách cạnh 
+                foreach (Edge edge in edgeLst) 
+                { 
+                    sw.WriteLine(edge.ToString());
+                }
+            }
+        }
         public static void Run()
         {
             Bai1();
+            Bai2();
         }
     }
 }

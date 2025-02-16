@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Collections.Generic;
+using ConsoleApp1.Models;
 
 namespace ConsoleApp1
 {
@@ -183,10 +185,140 @@ namespace ConsoleApp1
             catch (Exception ex)
             {
                 Console.WriteLine("Helper.ConvertEdgeListToAdjacency() uncaught exception: "); 
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex);
             }
 
             return adjList;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <param name="numOfVertice"></param>
+        /// <returns></returns>
+        public static List<Edge> ConvertAdjacencyToEdgeList(int[,] matrix, int numOfVertice)
+        {
+            if (matrix == null)
+            {
+                Console.WriteLine("Helper.ConvertAdjacencyToEdgeList() Invalid params!");
+            }
+            /* Append từng dòng của input danh sách kề => List */
+            int rowSize = matrix.GetLength(0);
+            int colSize = matrix.GetLength(1);  
+            // Khởi tạo List lưu trữ đỉnh kề 
+            List<List<int>> storedAdjLst = new List<List<int>>();
+            // Loop & insert đỉnh kề => List
+            for(int i = 0; i < rowSize; i++)
+            {
+                List<int> adjLst = new List<int>();
+                for(int j = 0; j < colSize; j++)
+                {
+                    // Trường hợp đỉnh cô lập 
+                    if(matrix[i, j] == 0)
+                    {
+                        continue;
+                    }
+                    // Insert đỉnh kề
+                    adjLst.Add(matrix[i, j]);
+                }
+                storedAdjLst.Add(adjLst);
+            }
+            // Tạo danh sách cạnh để lưu kết quả
+            List<Edge> edgeLst = null;
+            try
+            {
+                // Tạo danh sách cạnh
+                edgeLst = new List<Edge>();
+                // Khởi tạo biến cục bộ danh sách cạnh
+                HashSet<Edge> seenEdges = new HashSet<Edge>();
+                // Loop & tìm cạnh
+                for (int j = 1; j <= numOfVertice; j++)
+                {
+                    // Handle trường hợp danh sách parse từ input không hợp lệ
+                    if (storedAdjLst[j - 1] == null || storedAdjLst[j - 1].Count == 0)
+                    {
+                        continue;
+                    }
+                    foreach (int item in storedAdjLst[j - 1])
+                    {
+                        // Trường hợp Đỉnh cô lập
+                        if (item == 0)
+                        {
+                            continue;
+                        }
+                        // Tìm start-point & end-point 
+                        int startVertice = 0;
+                        int endVertice = 0;
+                        // Trường hợp loop start = end
+                        if (j == item)
+                        {
+                            continue;
+                        }
+                        // Xử lý logic tìm start - end
+                        if (j < item)
+                        {
+                            startVertice = j;
+                            endVertice = item;
+                        }
+                        if (j > item)
+                        {
+                            startVertice = item;
+                            endVertice = j;
+                        }
+                        // Build đối tượng cạnh
+                        Edge builtEdge = BuildEdge(startVertice, endVertice);
+                        if (builtEdge == null)
+                        {
+                            Console.WriteLine("Helper.ConvertAdjacencyToEdgeList build Edge failed!");
+                            continue;
+                        }
+                        // Check nếu Edge đã build có tồn tại trong hashset 
+                        Edge foundEdge = seenEdges.FirstOrDefault(x => (x != null && x.Equals(builtEdge)));
+                        // Thêm cạnh đã build vào HashSet nếu chưa tồn tại
+                        // Để đảm bảo danh sách cạnh không bị trùng lặp
+                        if (foundEdge == null)
+                        {
+                            seenEdges.Add(builtEdge);
+                            // Thêm cạnh vào danh sách return kết quả 
+                            edgeLst.Add(builtEdge);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Helper.ConvertAdjacencyToEdgeList() uncaught exception: ");
+                Console.WriteLine(ex);
+            }
+
+            return edgeLst;
+        }
+        static Edge BuildEdge(int startVertice, int endVertice)
+        {
+            if(startVertice <= 0 || endVertice <= 0)
+            {
+                return null;
+            }
+            int gap = startVertice + endVertice; 
+            if(gap <= 0)
+            {
+                return null;
+            }
+            Edge edge = new Edge(startVertice, endVertice);
+
+            return edge;
+        }
+        static Edge BuildEdge(int startVertice, int endVertice, int size)
+        {
+            if(size <= 0)
+            {
+                Console.WriteLine("Please use Helper.BuildEdge(int startVertice, int endVertice) instead!");
+                return null;
+            }
+            Edge edgeWithSize = BuildEdge(startVertice, endVertice);
+            edgeWithSize.Size = size;
+
+            return edgeWithSize;
         }
     }
 }

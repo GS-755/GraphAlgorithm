@@ -46,6 +46,7 @@
     <Compile Include="BaiTap\Buoi2.cs" />
     <Compile Include="BaiTap\Buoi3.cs" />
     <Compile Include="Helper.cs" />
+    <Compile Include="Models\Edge.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -56,6 +57,7 @@
     <None Include="Assets\Buoi2\BacVaoRa.inp" />
     <None Include="Assets\Buoi2\EdgeList.inp" />
     <None Include="Assets\Buoi3\Canh2Ke.inp" />
+    <None Include="Assets\Buoi3\Ke2Canh.inp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
