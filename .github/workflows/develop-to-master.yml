@@ -1,0 +1,19 @@
+name: stable-check
+
+on:
+  pull_request:
+    branches: [ master, DEVELOP ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Build solution
+      run: msbuild /p:Configuration=Debug

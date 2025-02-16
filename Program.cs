@@ -7,6 +7,7 @@ namespace ConsoleApp1
         public static void Main(string[] args)
         {
             Buoi2.Run();
+            Buoi3.Run();
         }
     }
 }
