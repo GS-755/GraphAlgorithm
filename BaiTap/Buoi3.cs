@@ -239,6 +239,8 @@ namespace ConsoleApp1.BaiTap
             Bai1();
             Bai2();
             Bai3();
+            Bai4();
+            Bai5();
         }
         /// <summary>
         /// Tìm bồn chứa từ ma trận kề 
