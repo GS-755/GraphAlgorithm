@@ -58,6 +58,7 @@
     <None Include="Assets\Buoi2\EdgeList.inp" />
     <None Include="Assets\Buoi3\BonChua.inp" />
     <None Include="Assets\Buoi3\Canh2Ke.inp" />
+    <None Include="Assets\Buoi3\DSKe2Canh.inp" />
     <None Include="Assets\Buoi3\Ke2Canh.inp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

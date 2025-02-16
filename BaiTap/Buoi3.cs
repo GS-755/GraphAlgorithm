@@ -117,6 +117,38 @@ namespace ConsoleApp1.BaiTap
                 sw.WriteLine(numOfVerticles);
             }
         }
+        static void Bai4()
+        {
+            // Đọc input ma trận 
+            string inpFilePath = "..\\..\\Assets\\Buoi3\\DSKe2Canh.inp";
+            string outFilePath = "..\\..\\Assets\\Buoi3\\DSKe2Canh.out";
+            bool handleInputStatus = Helper.ReadMatrix(inpFilePath);
+            if (handleInputStatus == false)
+            {
+                Console.WriteLine("Buoi3.Bai4() Invalid input data!");
+                return;
+            }
+            // Lấy dữ liệu từ Helper
+            int[,] matrix = Helper.ArrayMatrix;
+            int numOfVerticles = Helper.NumOfVerticles;
+            // Build đồ thị chuyển vị 
+            List<int>[] transposedLst = BuildTransposedGraph(matrix, numOfVerticles);
+            if(transposedLst == null)
+            {
+                Console.WriteLine("Buoi3.Bai4() Invalid output data!");
+                return;
+            }
+            // Xuất kết quả bài 4
+            int size = transposedLst.Length;
+            using(StreamWriter sw = new StreamWriter(outFilePath))
+            {
+                sw.WriteLine(numOfVerticles);
+                for (int i = 1; i < size; i++)
+                {
+                    sw.WriteLine(string.Join(" ", transposedLst[i]));
+                }
+            }
+        }
         public static void Run()
         {
             Bai1();
@@ -170,8 +202,67 @@ namespace ConsoleApp1.BaiTap
             catch (Exception ex) 
             {
                 Console.WriteLine("Buoi3.FindSinks() unhandled exception: ");
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex);
 
+                return null;
+            }
+        }
+        /// <summary>
+        /// Xây dựng Đồ thị chuyển vị (GT) từ Đồ thị có hướng (G)
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <param name="numOfVertice"></param>
+        /// <returns>Đồ thị chuyển vị (GT) (Transposed graph)</returns>
+        static List<int>[] BuildTransposedGraph(int[,] matrix, int numOfVertice)
+        {
+            if (matrix == null || matrix.Length == 0)
+            {
+                return null;
+            }
+            if (numOfVertice == 0)
+            {
+                return null;
+            }
+            // Khởi tạo danh sách chứa các cung 
+            List<int>[] transposedLst = new List<int>[numOfVertice + 1];
+            for(int i = 1; i <= numOfVertice; i++)
+            {
+                // Init từng danh sách một
+                transposedLst[i] = new List<int>();
+            }
+            try
+            {
+                for (int u = 1; u <= numOfVertice; u++)
+                {
+                    // Get dòng dữ liệu trong ma trận
+                    List<int> matrixRowData = Helper.GetMatrixRow(u - 1);
+                    if (matrixRowData == null)
+                    {
+                        continue;
+                    }
+                    foreach (int v in matrixRowData)
+                    {
+                        // Bỏ qua đỉnh cô lập 
+                        if(v == 0)
+                        {
+                            continue;
+                        }
+                        // Đảo chiều cạnh 
+                        transposedLst[v].Add(u);
+                    }
+                }
+                // Sắp xếp các danh sách kề theo thứ tự tăng dần
+                for (int i = 1; i < numOfVertice; i++)
+                {
+                    transposedLst[i].Sort();
+                }
+
+                return transposedLst;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Buoi3.BuildTransposedGraph() unhandled exception: ");
+                Console.WriteLine(ex);
                 return null;
             }
         }

@@ -28,7 +28,48 @@ namespace ConsoleApp1
         /// Chiều rộng của ma trận 
         /// </summary>
         public static int Col { get; set; }
+        /// <summary>
+        /// Danh sách các dòng input của ma trận (kiểu dữ liệu: int) 
+        /// </summary>
+        public static List<int> GetMatrixRow(int rowIndex)
+        {
+            if (ArrayMatrix == null)
+            {
+                Console.WriteLine("Helper.GetMatrixRow() invalid matrix!");
+                return null;
+            }
+            if (Row == 0 && Col == 0)
+            {
+                Console.WriteLine("Helper.GetMatrixRow() invalid size!");
+                return null;
+            }
+            if(rowIndex >= NumOfVerticles)
+            {
+                Console.WriteLine("Helper.GetMatrixRow() invalid row index!");
+                return null;
+            }
+            try
+            {
+                List<int> matrixRowData = new List<int>();
+                for (int i = 0; i < Row; i++)
+                {
+                    matrixRowData.Add(ArrayMatrix[rowIndex, i]);
+                }
 
+                return matrixRowData;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Helper.GetMatrixRow() unhandled exception!");
+                Console.WriteLine(ex);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Đọc dữ liệu ma trận từ file văn bản và lưu dữ liệu vào Helper.ArrayMatrix
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns>Bool: Kết quả đọc ma trận</returns>
         public static bool ReadMatrix(string path)
         {
             if(string.IsNullOrEmpty(path))
