@@ -43,7 +43,7 @@ namespace ConsoleApp1
                 Console.WriteLine("Helper.GetMatrixRow() invalid size!");
                 return null;
             }
-            if(rowIndex >= NumOfVerticles)
+            if(rowIndex > NumOfVerticles)
             {
                 Console.WriteLine("Helper.GetMatrixRow() invalid row index!");
                 return null;
@@ -334,7 +334,7 @@ namespace ConsoleApp1
 
             return edgeLst;
         }
-        static Edge BuildEdge(int startVertice, int endVertice)
+        public static Edge BuildEdge(int startVertice, int endVertice)
         {
             if(startVertice <= 0 || endVertice <= 0)
             {
@@ -349,7 +349,7 @@ namespace ConsoleApp1
 
             return edge;
         }
-        static Edge BuildEdge(int startVertice, int endVertice, int size)
+        public static Edge BuildEdge(int startVertice, int endVertice, int size)
         {
             if(size <= 0)
             {

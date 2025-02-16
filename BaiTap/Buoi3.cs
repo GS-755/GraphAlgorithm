@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Collections.Generic;
 using ConsoleApp1.Models;
 
@@ -146,6 +147,90 @@ namespace ConsoleApp1.BaiTap
                 for (int i = 1; i < size; i++)
                 {
                     sw.WriteLine(string.Join(" ", transposedLst[i]));
+                }
+            }
+        }
+        static void Bai5()
+        {
+            // Đọc input ma trận 
+            string inpFilePath = "..\\..\\Assets\\Buoi3\\TrungBinhCanh.inp";
+            string outFilePath = "..\\..\\Assets\\Buoi3\\TrungBinhCanh.out";
+            bool handleInputStatus = Helper.ReadMatrix(inpFilePath);
+            if (handleInputStatus == false)
+            {
+                Console.WriteLine("Buoi3.Bai5() Invalid input data!");
+                return;
+            }
+            // Lấy dữ liệu từ Helper
+            int[,] matrix = Helper.ArrayMatrix;
+            int numOfVerticles = Helper.NumOfVerticles;
+            int numOfEdges = Helper.NumOfEdges;
+            int rowSize = Helper.Row;
+            /* Định nghĩa các biến cần sử dụng */
+            // Giá trị max size của các cạnh trong đồ thị 
+            int maxSize = 0;
+            // Độ dài trung bình các cạnh trong đồ thị 
+            double avgSize = 0;
+            // Danh sách cạnh đã build 
+            List<Edge> edgeLst = null;
+            // Danh sách cạnh dài nhất của đồ thị 
+            List<Edge> longestEdges = null;
+            try
+            {
+                edgeLst = new List<Edge>();
+                // Loop & build danh sách cạnh 
+                for (int i = 0; i < numOfEdges; i++)
+                {
+                    List<int> matrixRowData = Helper.GetMatrixRow(i);
+                    if (matrixRowData == null)
+                    {
+                        continue;
+                    }
+                    if (matrixRowData.Count == 0)
+                    {
+                        continue;
+                    }
+                    int startVertice = matrixRowData[0];
+                    int endVertice = matrixRowData[1];
+                    int edgeSize = matrixRowData[2];
+                    Edge builtEdge = Helper.BuildEdge(startVertice, endVertice, edgeSize);
+                    if (builtEdge == null)
+                    {
+                        Console.WriteLine("Buoi3.Bai5() Build Edge object failed!");
+                        continue;
+                    }
+                    edgeLst.Add(builtEdge);
+                }
+                /* Tính toán các dữ liệu cần output */
+                // Tìm độ dài max của các cạnh trong đồ thị
+                maxSize = edgeLst.Max(x => x.Size);
+                // Tìm các cạnh có độ dài lớn nhất 
+                longestEdges = edgeLst.Where(x => x != null && x.Size == maxSize).ToList();
+                // Tính độ dài trung bình các cạnh của đồ thị 
+                avgSize = edgeLst.Average(x => x.Size);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Buoi3.Bai5() unhandled exception: ");
+                Console.WriteLine(ex);
+                // Reset edgeLst về null
+                edgeLst = null;
+
+                return;
+            }
+            if (edgeLst == null)
+            {
+                Console.WriteLine("Buoi3.Bai5() Invalid output data!");
+                return;
+            }
+            // Xuất kết quả bài 5
+            using (StreamWriter sw = new StreamWriter(outFilePath))
+            {
+                sw.WriteLine($"{avgSize:0.00}");
+                sw.WriteLine(longestEdges.Count);
+                foreach (Edge item in longestEdges)
+                {
+                    sw.WriteLine(item);
                 }
             }
         }
