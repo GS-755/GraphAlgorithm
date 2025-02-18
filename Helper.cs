@@ -361,5 +361,84 @@ namespace ConsoleApp1
 
             return edgeWithSize;
         }
+        /// <summary>
+        /// Init tập danh sách các đỉnh đã viếng thăm (visited) 
+        /// </summary>
+        /// <param name="numOfVertice"></param>
+        /// <returns>Tập danh sách các đỉnh đã viếng thăm (visited) </returns>
+        static Dictionary<int, bool> InitVisitedDict(int numOfVertice)
+        {
+            if(numOfVertice == 0)
+            {
+                return null;
+            }
+            Dictionary<int, bool> visitedDict = new Dictionary<int, bool>();
+            for (int i = 1; i <= numOfVertice; i++)
+            {
+                visitedDict.Add(i, false);
+            }
+
+            return visitedDict;
+        }
+        /// <summary>
+        /// Duyệt đồ thị theo chiều ngang (Breadth First Search a.k.a BFS)
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <param name="numOfVertice"></param>
+        /// <param name="startVertice"></param>
+        /// <returns>Danh sách các miền liên thông đã duyệt từ đỉnh startVertice</returns>
+        public static List<int> BFS(int[,] matrix, int numOfVertice, int startVertice)
+        {
+            if(matrix == null || numOfVertice == 0)
+            {
+                Console.WriteLine("Helper.BFS() Invalid params!");
+                return null;
+            }
+            // Danh sách các đỉnh liên thông
+            List<int> bfsResults = new List<int>();
+            try
+            {
+                // Danh sách các đỉnh đã viếng thăm 
+                Dictionary<int, bool> visitedVertice = InitVisitedDict(numOfVertice);
+                // Hàng đợi BFS
+                Queue<int> bfsQueue = new Queue<int>();
+                // Đỉnh xuất phát
+                int vertice = startVertice;
+                // Enqueue đỉnh xuất phát & đánh dấu trạng thái visited = true
+                bfsQueue.Enqueue(vertice);
+                visitedVertice[vertice] = true;
+                // Duyệt & enqueue các đỉnh kề
+                while (bfsQueue.Count > 0)
+                {
+                    List<int> adjLst = GetMatrixRow(vertice);
+                    if(adjLst == null || adjLst.Count == 0)
+                    {
+                        continue;
+                    }
+                    // Loop các đỉnh kề của đỉnh đang xét 
+                    foreach (int adjVertice in adjLst)
+                    {
+                        // Trường hợp đỉnh cô lập
+                        if(adjVertice == 0)
+                        {
+                            continue;
+                        }
+                        // Enqueue & đánh dấu visited đỉnh kề đang xét
+                        bfsQueue.Enqueue(adjVertice);
+                        visitedVertice[adjVertice] = true;
+                        // Thêm đỉnh kề liên thông vào danh sách kết quả
+                        bfsResults.Add(adjVertice);
+                    }
+                }
+
+                return bfsResults;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Helper.BFS() uncaught exception: ");
+                Console.WriteLine(ex);  
+                return null;
+            }
+        }
     }
 }
