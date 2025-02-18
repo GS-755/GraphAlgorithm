@@ -74,18 +74,18 @@ namespace ConsoleApp1
         {
             if(string.IsNullOrEmpty(path))
             {
-                Console.WriteLine("Invalid file PATH!"); 
+                Console.WriteLine("Helper.ReadMatrix() Invalid file PATH!"); 
                 return false; 
             }
             if(!File.Exists(path))
             {
-                Console.WriteLine($"File {Path.GetFullPath(path)} not found!");
+                Console.WriteLine($"Helper.ReadMatrix() File {Path.GetFullPath(path)} not found!");
                 return false;
             }
             string[] lines = File.ReadAllLines(path); 
             if(lines == null || lines.Length == 0)
             {
-                Console.WriteLine("Invalid data!");
+                Console.WriteLine("Helper.ReadMatrix() Invalid data!");
                 return false;
             }
             /* Đọc & lấy số bậc */
@@ -93,10 +93,10 @@ namespace ConsoleApp1
             int number = 0;
             string[] numVerticesData = lines[0].Trim().Split(' ');
             /* Parse số đỉnh ma trận */
-            bool getNumVerticesStatus = int.TryParse(numVerticesData[0], out number);
-            if(getNumVerticesStatus == false)
+            bool parseVerticeStatus = int.TryParse(numVerticesData[0], out number);
+            if(parseVerticeStatus == false)
             {
-                Console.WriteLine("Parse number of vertices failed!"); 
+                Console.WriteLine("Helper.ReadMatrix() Parse number of vertices failed!"); 
                 return false;
             }
             // Cast số đỉnh ma trận
@@ -110,7 +110,7 @@ namespace ConsoleApp1
                     bool getNumEdgeStatus = int.TryParse(numVerticesData[1], out number);
                     if (getNumEdgeStatus == false)
                     {
-                        Console.WriteLine("Parse number of edges failed!");
+                        Console.WriteLine("Helper.ReadMatrix() Parse number of edges failed!");
                     }
                     else
                     {
@@ -128,7 +128,7 @@ namespace ConsoleApp1
             {
                 if(string.IsNullOrEmpty(lines[i]))
                 {
-                    Console.WriteLine($"Text Data line #{i} Invalid");
+                    Console.WriteLine($"Helper.ReadMatrix() Text Data line #{i} Invalid");
                     continue;
                 }
                 string[] line = lines[i].Trim().Split(' ');
@@ -139,7 +139,7 @@ namespace ConsoleApp1
                     string data = line[j];
                     if (string.IsNullOrEmpty(data))
                     {
-                        Console.WriteLine($"Row: {i}, Col: {j} Invalid data!");
+                        Console.WriteLine($"Helper.ReadMatrix() Row: {i}, Col: {j} Invalid data!");
                         continue;
                     }
                     bool isIntConvertSuccess = int.TryParse(line[j], out number);
