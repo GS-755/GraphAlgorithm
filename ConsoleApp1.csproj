@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="BaiTap\Buoi2.cs" />
     <Compile Include="BaiTap\Buoi3.cs" />
+    <Compile Include="BaiTap\Buoi4.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Models\Edge.cs" />
     <Compile Include="Program.cs" />
