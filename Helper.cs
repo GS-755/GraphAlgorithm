@@ -29,23 +29,30 @@ namespace ConsoleApp1
         /// </summary>
         public static int Col { get; set; }
         /// <summary>
-        /// Danh sách các dòng input của ma trận (kiểu dữ liệu: int) 
+        /// Danh sách các tham số input  
         /// </summary>
+        public static List<int> Args { get; set; } = new List<int>(); 
+
+        /// <summary>
+        /// Hàm lấy dữ liệu của 1 dòng trong ma trận 
+        /// </summary>
+        /// <param name="rowIndex"></param>
+        /// <returns>Danh sách int các dữ liệu của ma trận</returns>
         public static List<int> GetMatrixRow(int rowIndex)
         {
             if (ArrayMatrix == null)
             {
-                Console.WriteLine("Helper.GetMatrixRow() invalid matrix!");
+                Console.WriteLine("Helper.GetMatrixRow() invalid internal matrix!");
                 return null;
             }
             if (Row == 0 && Col == 0)
             {
-                Console.WriteLine("Helper.GetMatrixRow() invalid size!");
+                Console.WriteLine("Helper.GetMatrixRow() invalid internal matrix size!");
                 return null;
             }
             if(rowIndex > NumOfVerticles)
             {
-                Console.WriteLine("Helper.GetMatrixRow() invalid row index!");
+                Console.WriteLine("Helper.GetMatrixRow() invalid internal matrix row index!");
                 return null;
             }
             try
@@ -232,16 +239,16 @@ namespace ConsoleApp1
             return adjList;
         }
         /// <summary>
-        /// 
+        /// Chuyển đổi Danh sách kề thành Danh sách cạnh
         /// </summary>
         /// <param name="matrix"></param>
         /// <param name="numOfVertice"></param>
-        /// <returns></returns>
-        public static List<Edge> ConvertAdjacencyToEdgeList(int[,] matrix, int numOfVertice)
+        /// <returns>List Danh sách cạnh</returns>
+        public static List<Edge> ConvertAdjacencyListToEdgeList(int[,] matrix, int numOfVertice)
         {
             if (matrix == null)
             {
-                Console.WriteLine("Helper.ConvertAdjacencyToEdgeList() Invalid params!");
+                Console.WriteLine("Helper.ConvertAdjacencyListToEdgeList() Invalid params!");
             }
             /* Append từng dòng của input danh sách kề => List */
             int rowSize = matrix.GetLength(0);
@@ -310,7 +317,7 @@ namespace ConsoleApp1
                         Edge builtEdge = BuildEdge(startVertice, endVertice);
                         if (builtEdge == null)
                         {
-                            Console.WriteLine("Helper.ConvertAdjacencyToEdgeList build Edge failed!");
+                            Console.WriteLine("Helper.ConvertAdjacencyListToEdgeList build Edge failed!");
                             continue;
                         }
                         // Check nếu Edge đã build có tồn tại trong hashset 
@@ -328,7 +335,7 @@ namespace ConsoleApp1
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Helper.ConvertAdjacencyToEdgeList() uncaught exception: ");
+                Console.WriteLine("Helper.ConvertAdjacencyListToEdgeList() uncaught exception: ");
                 Console.WriteLine(ex);
             }
 
@@ -423,11 +430,15 @@ namespace ConsoleApp1
                         {
                             continue;
                         }
-                        // Enqueue & đánh dấu visited đỉnh kề đang xét
-                        bfsQueue.Enqueue(adjVertice);
-                        visitedVertice[adjVertice] = true;
-                        // Thêm đỉnh kề liên thông vào danh sách kết quả
-                        bfsResults.Add(adjVertice);
+                        // Trường hợp đỉnh chưa được viếng thăm
+                        if (visitedVertice[adjVertice] == false)
+                        {
+                            // Enqueue & đánh dấu visited đỉnh kề đang xét
+                            bfsQueue.Enqueue(adjVertice);
+                            visitedVertice[adjVertice] = true;
+                            // Thêm đỉnh kề liên thông vào danh sách kết quả
+                            bfsResults.Add(adjVertice);
+                        }
                     }
                 }
 

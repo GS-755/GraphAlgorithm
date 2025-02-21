@@ -72,7 +72,7 @@ namespace ConsoleApp1.BaiTap
             int[,] matrix = Helper.ArrayMatrix;
             int numOfVerticles = Helper.NumOfVerticles;
             // Convert Danh sách kề sang Danh sách cạnh
-            List<Edge> edgeLst = Helper.ConvertAdjacencyToEdgeList(matrix, numOfVerticles);
+            List<Edge> edgeLst = Helper.ConvertAdjacencyListToEdgeList(matrix, numOfVerticles);
             if(edgeLst == null)
             {
                 Console.WriteLine("Buoi3.Bai2() Invalid output data!");
