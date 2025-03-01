@@ -195,6 +195,8 @@ namespace ConsoleApp1
                 Console.WriteLine("Helper.ReadMatrix() Invalid data!");
                 return false;
             }
+            // Số dòng trong input file 
+            int numOfLines = lines.Length;
             // Out reference number
             int number = 0;
             /* Cast chiều dài x chiều rộng của ma trận */
@@ -203,14 +205,14 @@ namespace ConsoleApp1
             // Khởi tạo (lại) ma trận) 
             ArrayMatrix = new int[Row, Col];
             /* Loop & insert data vào ma trận */
-            for(int i = startMatrixRow; i <= Row; i++)
+            for(int i = startMatrixRow; i < numOfLines; i++)
             {
                 string[] line = null; 
                 try
                 {
                     if (string.IsNullOrEmpty(lines[i]))
                     {
-                        Console.WriteLine($"Helper.ReadMatrix() Text Data line #{i} Invalid");
+                        Console.WriteLine($"Helper.ReadMatrix() Text Data - File: {Path.GetFileName(path)} - line #{i} Invalid");
                         continue;
                     }
                     line = lines[i].Trim().Split(' ');
@@ -239,6 +241,7 @@ namespace ConsoleApp1
                 }
             }
             /* In thử ma trận */
+            Console.WriteLine($"Matrix file: {Path.GetFileName(path)}");
             PrintMatrix(); 
 
             return true; 
@@ -256,6 +259,7 @@ namespace ConsoleApp1
             }
             for(int i = 0; i < Row; i++)
             {
+                Console.Write($"Line {i:00}: ");
                 for(int j = 0; j < Col; j++)
                 {
                     Console.Write($"{ArrayMatrix[i, j]} "); 
@@ -504,6 +508,7 @@ namespace ConsoleApp1
                     List<int> adjLst = GetMatrixRow(dequeuedItem - 1);
                     if(adjLst == null || adjLst.Count == 0)
                     {
+                        Console.WriteLine($"Helper.BFS() Vertice #{dequeuedItem} no adjacency vertice found!");
                         continue;
                     }
                     // Loop các đỉnh kề của đỉnh đang xét 
