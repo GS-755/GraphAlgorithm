@@ -18,7 +18,7 @@ jobs:
       uses: microsoft/setup-msbuild@v2
 
     - name: Restore NuGet Dependencies
-      run: msbuild -t:restore
+      run: msbuild -t:restore -p:RestorePackagesConfig=true
 
     - name: Build solution
       run: msbuild /p:Configuration=Debug
