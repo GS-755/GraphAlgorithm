@@ -366,3 +366,6 @@ FodyWeavers.xsd
 **/*.out 
 # Microsoft Office temporary files
 **/~$*
+# Exported release source code BUT NOT Program.cs
+Program_**.cs 
+!Program.cs
