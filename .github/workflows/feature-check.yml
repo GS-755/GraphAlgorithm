@@ -1,8 +1,8 @@
-name: stable-check
+name: feature-check
 
 on:
-  pull_request:
-    branches: [ master, DEVELOP ]
+  push:
+    branches: [ feature/* ]
 
 jobs:
   build:
@@ -14,6 +14,9 @@ jobs:
 
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v2
+
+    - name: Restore NuGet Dependencies
+      run: msbuild -t:restore -p:RestorePackagesConfig=true
 
     - name: Build solution
       run: msbuild /p:Configuration=Debug
