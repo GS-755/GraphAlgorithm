@@ -3,8 +3,6 @@ name: exercise-check
 on:
   push:
     branches: [ Buoi* ]
-  pull_request:
-    branches: [ DEVELOP ]
 
 jobs:
   build:
