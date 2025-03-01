@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+using ConsoleApp1.Constants;
+
 namespace ConsoleApp1.Utils
 {
     public static class MergeReleaseSource
@@ -56,8 +58,7 @@ namespace ConsoleApp1.Utils
         /// </summary>
         public static void Execute()
         {
-            string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmm");
-            string outputFile = Path.Combine(PROJECT_PATH, $"Program_{timestamp}.cs");
+            string outputFile = Path.Combine(PROJECT_PATH, $"Program_{GitInfo.GIT_BRANCH}.cs");
 
             List<string> allClasses = new List<string>();
             Console.WriteLine($"MergeReleaseSource.Execute() Version: {VERSION}");

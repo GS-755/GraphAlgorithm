@@ -33,7 +33,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
       with:
         tag_name: DEVELOP_${{ github.sha }}
-        release_name: DEVELOP_$(date +'%d%m%Y_%H%M')
+        release_name: DEVELOP_${{ github.sha }}
         draft: false
         prerelease: true
 
@@ -43,6 +43,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: bin\\Debug\\Program_*.cs
-        asset_name: Program_$(date +'%d%m%Y_%H%M').cs
+        asset_path: .\\Program_DEVELOP.cs
+        asset_name: Program_DEVELOP.cs
         asset_content_type: text/plain
