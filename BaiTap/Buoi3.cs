@@ -10,9 +10,15 @@ namespace ConsoleApp1.BaiTap
     {
         static void Bai1()
         {
-            // Đọc input ma trận 
+            // Khởi tạo đường dẫn input/output
             string inpFilePath = "..\\..\\Assets\\Buoi3\\Canh2Ke.inp";
             string outFilePath = "..\\..\\Assets\\Buoi3\\Canh2Ke.out";
+            // Đọc tham số của file input
+            Helper.ParseParams(inpFilePath);
+            // Set dữ liệu cho Helper
+            Helper.NumOfVerticles = Helper.GetParamsValue(0, 0);
+            Helper.NumOfEdges = Helper.GetParamsValue(0, 1);
+            // Đọc input ma trận
             bool handleInputStatus = Helper.ReadMatrix(inpFilePath);
             if (handleInputStatus == false)
             {
@@ -45,12 +51,16 @@ namespace ConsoleApp1.BaiTap
                     }
                     // Loop & Xuất danh sách kề 
                     int lstItemCount = adjacencyLstItems.Count;
-                    for(int j = 0; j < lstItemCount; j++)
+                    if(lstItemCount == 0)
+                    {
+                        continue;
+                    }
+                    for (int j = 0; j < lstItemCount; j++)
                     {
                         sw.Write($"{adjacencyLstItems[j]} ");
                     }
                     // Kết thúc xuống dòng nếu vòng lặp đã đi đến cuối (loại bỏ \n bị dư)
-                    if(i != adjLstLength - 1)
+                    if (i != adjLstLength - 1)
                     {
                         sw.WriteLine();
                     }
@@ -59,9 +69,14 @@ namespace ConsoleApp1.BaiTap
         }
         static void Bai2()
         {
-            // Đọc input ma trận 
+            // Khởi tạo đường dẫn input/output
             string inpFilePath = "..\\..\\Assets\\Buoi3\\Ke2Canh.inp";
             string outFilePath = "..\\..\\Assets\\Buoi3\\Ke2Canh.out";
+            // Đọc tham số của file input
+            Helper.ParseParams(inpFilePath);
+            // Set dữ liệu cho Helper
+            Helper.NumOfVerticles = Helper.GetParamsValue(0, 0);
+            // Đọc input ma trận
             bool handleInputStatus = Helper.ReadMatrix(inpFilePath);
             if (handleInputStatus == false)
             {
@@ -93,9 +108,14 @@ namespace ConsoleApp1.BaiTap
         }
         static void Bai3()
         {
-            // Đọc input ma trận 
+            // Khởi tạo đường dẫn input/output
             string inpFilePath = "..\\..\\Assets\\Buoi3\\BonChua.inp";
             string outFilePath = "..\\..\\Assets\\Buoi3\\BonChua.out";
+            // Đọc tham số của file input
+            Helper.ParseParams(inpFilePath);
+            // Set dữ liệu cho Helper
+            Helper.NumOfVerticles = Helper.GetParamsValue(0, 0);
+            // Đọc input ma trận
             bool handleInputStatus = Helper.ReadMatrix(inpFilePath);
             if (handleInputStatus == false)
             {
@@ -120,9 +140,14 @@ namespace ConsoleApp1.BaiTap
         }
         static void Bai4()
         {
-            // Đọc input ma trận 
+            // Khởi tạo đường dẫn input/output
             string inpFilePath = "..\\..\\Assets\\Buoi3\\DSKe2Canh.inp";
             string outFilePath = "..\\..\\Assets\\Buoi3\\DSKe2Canh.out";
+            // Đọc tham số của file input
+            Helper.ParseParams(inpFilePath);
+            // Set dữ liệu cho Helper
+            Helper.NumOfVerticles = Helper.GetParamsValue(0, 0);
+            // Đọc input ma trận
             bool handleInputStatus = Helper.ReadMatrix(inpFilePath);
             if (handleInputStatus == false)
             {

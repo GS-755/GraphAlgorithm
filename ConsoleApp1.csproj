@@ -62,6 +62,7 @@
     <None Include="Assets\Buoi3\DSKe2Canh.inp" />
     <None Include="Assets\Buoi3\Ke2Canh.inp" />
     <None Include="Assets\Buoi3\TrungBinhCanh.inp" />
+    <None Include="Assets\Buoi4\BFS.inp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

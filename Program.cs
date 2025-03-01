@@ -8,6 +8,7 @@ namespace ConsoleApp1
         {
             Buoi2.Run();
             Buoi3.Run();
+            Buoi4.Run();
         }
     }
 }

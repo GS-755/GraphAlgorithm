@@ -31,7 +31,7 @@ namespace ConsoleApp1
         /// <summary>
         /// Danh sách các tham số input  
         /// </summary>
-        public static List<int> Args { get; set; } = new List<int>(); 
+        static Dictionary<int, List<int>> Args { get; set; } = new Dictionary<int, List<int>>(); 
 
         /// <summary>
         /// Hàm lấy dữ liệu của 1 dòng trong ma trận 
@@ -73,11 +73,111 @@ namespace ConsoleApp1
             }
         }
         /// <summary>
+        /// Parse các tham số của bài làm theo số dòng chỉ định (tính từ dòng 0) sang Helper.Args: Dictionary với key = dòng i
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="inputLineSize"></param>
+        public static void ParseParams(string path, int inputLineSize = 1)
+        {
+            // Khởi tạo lại Dictionary params 
+            Args = new Dictionary<int, List<int>>(); 
+            // Validate dữ liệu đầu vào 
+            if (string.IsNullOrEmpty(path))
+            {
+                Console.WriteLine("Helper.ParseParams() Invalid file PATH!");
+                return;
+            }
+            if (!File.Exists(path))
+            {
+                Console.WriteLine($"Helper.ParseParams() File {Path.GetFullPath(path)} not found!");
+                return;
+            }
+            if(inputLineSize < 1)
+            {
+                Console.WriteLine("Helper.ParseParams() Invalid inputLineSize!");
+                return; 
+            }
+            // Out reference number
+            int number = 0;
+            // Đọc stream file văn bản 
+            string[] lines = File.ReadAllLines(path);
+            // Loop từ dòng đầu tiên đến dòng chỉ định (-1) 
+            for (int i = 0; i < inputLineSize; i++)
+            {
+                try
+                {
+                    // Tách params theo dấu ' ' 
+                    string[] arrParams = lines[i].Trim().Split(' ');
+                    if (arrParams == null || arrParams.Length <= 0)
+                    {
+                        Console.WriteLine($"Helper.ReadMatrix() Read param(s) line #{i + 1} failed!");
+                        continue;
+                    }
+                    int arrParamsSize = arrParams.Length;
+                    // Init danh sách tạm để chứa params 
+                    List<int> paramsLst = new List<int>();
+                    for (int j = 0; j < arrParamsSize; j++)
+                    {
+                        bool tryParseParam = int.TryParse(arrParams[j], out number);
+                        if (tryParseParam == false)
+                        {
+                            Console.WriteLine($"Helper.ReadMatrix() Params index [i = {i + 1}, j = {j + 1}] failed!");
+                            continue;
+                        }
+                        // Thêm params vào danh sách tạm 
+                        paramsLst.Add(number);
+                    }
+                    // Thêm params vào Dictionary với key = số dòng đang duyệt 
+                    if (paramsLst.Count > 0)
+                    {
+                        Args.Add(i, paramsLst);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Helper.ReadMatrix() Params line #{i + 1} no data!");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Helper.ReadMatrix() Read params line #{i} unhandled exception: ");
+                    Console.WriteLine(ex);
+                }
+            }
+        }
+        /// <summary>
+        /// Lấy tham số từ Helper.Args: Dictionary 
+        /// </summary>
+        /// <param name="rowIndex"></param>
+        /// <param name="argsOrder"></param>
+        /// <returns>Tham số đã được parsed ra số nguyên</returns>
+        public static int GetParamsValue(int rowIndex, int argsOrder)
+        {
+            if(Args == null)
+            {
+                Console.WriteLine($"Helper.GetParamsValue() Invalid args data!");
+                return -1; 
+            }
+            try
+            {
+                int data = Args[rowIndex][argsOrder];
+
+                return data; 
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"Helper.GetParamsValue() unhandled exception: ");
+                Console.WriteLine(ex);
+
+                return -1;
+            }
+        }
+        /// <summary>
         /// Đọc dữ liệu ma trận từ file văn bản và lưu dữ liệu vào Helper.ArrayMatrix
         /// </summary>
         /// <param name="path"></param>
+        /// <param name="startMatrixRow"></param>
         /// <returns>Bool: Kết quả đọc ma trận</returns>
-        public static bool ReadMatrix(string path)
+        public static bool ReadMatrix(string path, int startMatrixRow = 1)
         {
             if(string.IsNullOrEmpty(path))
             {
@@ -95,50 +195,32 @@ namespace ConsoleApp1
                 Console.WriteLine("Helper.ReadMatrix() Invalid data!");
                 return false;
             }
-            /* Đọc & lấy số bậc */
             // Out reference number
             int number = 0;
-            string[] numVerticesData = lines[0].Trim().Split(' ');
-            /* Parse số đỉnh ma trận */
-            bool parseVerticeStatus = int.TryParse(numVerticesData[0], out number);
-            if(parseVerticeStatus == false)
-            {
-                Console.WriteLine("Helper.ReadMatrix() Parse number of vertices failed!"); 
-                return false;
-            }
-            // Cast số đỉnh ma trận
-            NumOfVerticles = number;
-            /* Parse & cast số cạnh ma trận */
-            // Check độ dài mảng số đỉnh | số cạnh 
-            if(numVerticesData.Length == 2)
-            {
-                if (!string.IsNullOrEmpty(numVerticesData[1]))
-                {
-                    bool getNumEdgeStatus = int.TryParse(numVerticesData[1], out number);
-                    if (getNumEdgeStatus == false)
-                    {
-                        Console.WriteLine("Helper.ReadMatrix() Parse number of edges failed!");
-                    }
-                    else
-                    {
-                        NumOfEdges = number;
-                    }
-                }
-            }
-            /* Khởi tạo ma trận & cast chiều dài x chiều rộng của ma trận */
+            /* Cast chiều dài x chiều rộng của ma trận */
             Row = (NumOfEdges > 0 ? NumOfEdges : NumOfVerticles);
             Col = (NumOfEdges > 0 ? NumOfEdges : NumOfVerticles);
+            // Khởi tạo (lại) ma trận) 
             ArrayMatrix = new int[Row, Col];
             /* Loop & insert data vào ma trận */
-            int len = lines.Length;
-            for(int i = 1; i < len; i++)
+            for(int i = startMatrixRow; i <= Row; i++)
             {
-                if(string.IsNullOrEmpty(lines[i]))
+                string[] line = null; 
+                try
                 {
-                    Console.WriteLine($"Helper.ReadMatrix() Text Data line #{i} Invalid");
+                    if (string.IsNullOrEmpty(lines[i]))
+                    {
+                        Console.WriteLine($"Helper.ReadMatrix() Text Data line #{i} Invalid");
+                        continue;
+                    }
+                    line = lines[i].Trim().Split(' ');
+                }
+                catch(IndexOutOfRangeException ex)
+                {
+                    Console.WriteLine("Helper.ReadMatrix() IndexOutOfRangeException: ");
+                    Console.WriteLine(ex);
                     continue;
                 }
-                string[] line = lines[i].Trim().Split(' ');
                 // Sub-line length 
                 int subLineLength = line.Length;
                 for (int j = 0; j < subLineLength; j++)
@@ -211,7 +293,7 @@ namespace ConsoleApp1
                 adjList = new List<int>[numOfEdges + 1];
                 // Loop & init các cạnh theo danh sách số nguyên 
                 // Loop từ 1 để?
-                for (int i = 1; i <= numOfEdges; i++)
+                for (int i = 0; i <= numOfEdges; i++)
                 {
                     adjList[i] = new List<int>();
                 }
@@ -417,7 +499,9 @@ namespace ConsoleApp1
                 // Duyệt & enqueue các đỉnh kề
                 while (bfsQueue.Count > 0)
                 {
-                    List<int> adjLst = GetMatrixRow(vertice);
+                    // Dequeue đỉnh trong queue
+                    int dequeuedItem = bfsQueue.Dequeue();
+                    List<int> adjLst = GetMatrixRow(dequeuedItem - 1);
                     if(adjLst == null || adjLst.Count == 0)
                     {
                         continue;
