@@ -1,8 +1,10 @@
-name: exercise-check
+name: github-ci
 
 on:
   push:
-    branches: [ Buoi* ]
+    branches: [ DEVELOP ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
@@ -15,8 +17,6 @@ jobs:
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v2
 
-    - name: Restore NuGet Dependencies
-      run: msbuild -t:restore -p:RestorePackagesConfig=true
-
     - name: Build solution
       run: msbuild /p:Configuration=Debug
+
