@@ -480,31 +480,57 @@ namespace ConsoleApp1
         /// <param name="numOfVertice"></param>
         /// <param name="startVertice"></param>
         /// <returns>Danh sách các miền liên thông đã duyệt từ đỉnh startVertice</returns>
-        public static List<int> BFS(int[,] matrix, int numOfVertice, int startVertice)
+        public static List<int> BFS(int[,] matrix, int numOfVertice, int startVertice, int endVertice = 0)
         {
-            if(matrix == null || numOfVertice == 0)
+            if(matrix == null || numOfVertice == 0 || startVertice == 0)
             {
                 Console.WriteLine("Helper.BFS() Invalid params!");
                 return null;
             }
             // Danh sách các đỉnh liên thông
             List<int> bfsResults = new List<int>();
+            // Danh sách các đỉnh đã viếng thăm 
+            Dictionary<int, bool> visitedVertice = InitVisitedDict(numOfVertice);
+            // Hàng đợi BFS
+            Queue<int> bfsQueue = new Queue<int>();
+            // Khởi tạo Dictionary để lưu đường đi
+            Dictionary<int, int> parent = new Dictionary<int, int>();
             try
             {
-                // Danh sách các đỉnh đã viếng thăm 
-                Dictionary<int, bool> visitedVertice = InitVisitedDict(numOfVertice);
-                // Hàng đợi BFS
-                Queue<int> bfsQueue = new Queue<int>();
                 // Đỉnh xuất phát
                 int vertice = startVertice;
                 // Enqueue đỉnh xuất phát & đánh dấu trạng thái visited = true
                 bfsQueue.Enqueue(vertice);
                 visitedVertice[vertice] = true;
+                // Đỉnh start => start parent = -1
+                parent[vertice] = -1;
                 // Duyệt & enqueue các đỉnh kề
                 while (bfsQueue.Count > 0)
                 {
                     // Dequeue đỉnh trong queue
                     int dequeuedItem = bfsQueue.Dequeue();
+                    // Tìm đường đi: Kiểm tra nếu đỉnh hiện tại là đỉnh kết thúc
+                    if(endVertice > 0)
+                    {
+                        if (dequeuedItem == endVertice)
+                        {
+                            // Tạo đường đi từ đỉnh start đến đỉnh end
+                            List<int> path = new List<int>();
+                            int currentFindPathVertice = endVertice;
+                            /* 
+                             * Ngoại trừ startVertice, 
+                             * loop các đỉnh kề trước các đỉnh đã xét và thêm vào danh sách kết quả 
+                             */
+                            while (currentFindPathVertice != -1)
+                            {
+                                path.Add(currentFindPathVertice);
+                                currentFindPathVertice = parent[currentFindPathVertice];
+                            }
+                            path.Reverse();
+
+                            return path;
+                        }
+                    }
                     List<int> adjLst = GetMatrixRow(dequeuedItem - 1);
                     if(adjLst == null || adjLst.Count == 0)
                     {
@@ -519,15 +545,18 @@ namespace ConsoleApp1
                         {
                             continue;
                         }
-                        // Trường hợp đỉnh chưa được viếng thăm
-                        if (visitedVertice[adjVertice] == false)
+                        // Trường hợp đỉnh đã được viếng thăm
+                        if (visitedVertice[adjVertice] == true)
                         {
-                            // Enqueue & đánh dấu visited đỉnh kề đang xét
-                            bfsQueue.Enqueue(adjVertice);
-                            visitedVertice[adjVertice] = true;
-                            // Thêm đỉnh kề liên thông vào danh sách kết quả
-                            bfsResults.Add(adjVertice);
+                            continue;
                         }
+                        // Enqueue & đánh dấu visited đỉnh kề đang xét
+                        bfsQueue.Enqueue(adjVertice);
+                        visitedVertice[adjVertice] = true;
+                        // Thêm đỉnh kề liên thông vào danh sách kết quả
+                        bfsResults.Add(adjVertice);
+                        // Lưu lại đỉnh kề trước đỉnh đang xét 
+                        parent[adjVertice] = dequeuedItem;
                     }
                 }
 
