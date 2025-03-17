@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 using ConsoleApp1.Constants;
 
-namespace ConsoleApp1.Utils
+namespace ConsoleApp1
 {
     public static class MergeReleaseSource
     {
@@ -23,7 +23,7 @@ namespace ConsoleApp1.Utils
         /// <summary>
         /// Declare namespace here for export!
         /// </summary>
-        static readonly string EXPORT_NAMESPACE = "21DH114236_TTDT";
+        static readonly string EXPORT_NAMESPACE = "TTDT_21DH114236";
         /// <summary>
         /// Declare list .cs file(s) to exclude for merge source 
         /// </summary>
@@ -43,15 +43,10 @@ namespace ConsoleApp1.Utils
             {
                 return false; 
             }
-            foreach(string excludedFileName in excludedCsFiles)
-            {
-                if(fileName.Trim() == excludedFileName)
-                {
-                    return true; 
-                }
-            }
+            string fileNameWithoutPath = Path.GetFileName(fileName);
+            string matchCsFileName = excludedCsFiles.FirstOrDefault(x => (x != null && x == fileNameWithoutPath));
 
-            return false; 
+            return (matchCsFileName != null);
         }
         /// <summary>
         /// Execute merge source procedure 
@@ -59,13 +54,24 @@ namespace ConsoleApp1.Utils
         public static void Execute()
         {
             string outputFile = Path.Combine(PROJECT_PATH, $"Program_{GitInfo.GIT_BRANCH}.cs");
-
+            string exportedPath = Path.GetFullPath(outputFile);
             List<string> allClasses = new List<string>();
             Console.WriteLine($"MergeReleaseSource.Execute() Version: {VERSION}");
             Console.WriteLine("MergeReleaseSource.Execute() Start merge source");
+            if (File.Exists(exportedPath))
+            {
+                File.Delete(exportedPath);
+                Console.WriteLine("Deleted old merged source file!");
+            }
+            string[] arrCsFiles = Directory.GetFiles(PROJECT_PATH, "*.cs", SearchOption.AllDirectories);
+            if(arrCsFiles == null || arrCsFiles.Length <= 0)
+            {
+                Console.WriteLine("Invalid *.cs file list!");
+                return; 
+            }
             try
             {
-                foreach (string file in Directory.GetFiles(PROJECT_PATH, "*.cs", SearchOption.AllDirectories))
+                foreach (string file in arrCsFiles)
                 {
                     if (IsFileExcluded(file))
                     {
@@ -81,9 +87,10 @@ namespace ConsoleApp1.Utils
                     }
                 }
 
-                using (StreamWriter writer = new StreamWriter(outputFile))
+                using (StreamWriter writer = new StreamWriter(outputFile, false))
                 {
                     writer.WriteLine("using System;");
+                    writer.WriteLine("using System.IO;");
                     writer.WriteLine("using System.Linq;");
                     writer.WriteLine("using System.Collections.Generic;");
                     writer.WriteLine();
@@ -100,8 +107,6 @@ namespace ConsoleApp1.Utils
                     }
                     writer.WriteLine("}");
                 }
-
-                string exportedPath = Path.GetFullPath(outputFile);
                 Console.WriteLine($"Merge all source complete! All classes are now in {exportedPath}");
             }
             catch(Exception ex)

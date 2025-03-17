@@ -77,7 +77,7 @@
     <Compile Include="BaiTap\Buoi2.cs" />
     <Compile Include="BaiTap\Buoi3.cs" />
     <Compile Include="Helper.cs" />
-    <Compile Include="Utils\MergeReleaseSource.cs" />
+    <Compile Include="MergeReleaseSource.cs" />
     <Compile Include="Models\Edge.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
