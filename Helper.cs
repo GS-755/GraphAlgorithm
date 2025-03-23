@@ -9,6 +9,12 @@ namespace ConsoleApp1
     public class Helper
     {
         /// <summary>
+        /// Relative asset path 
+        /// .NET Core: ..\\..\\..\\
+        /// .NET Framework: ..\\..\\
+        /// </summary>
+        public static string RELATIVE_ASSET_PATH = "..\\..\\..\\";
+        /// <summary>
         /// Số đỉnh của đồ thị
         /// </summary>
         public static int NumOfVerticles { get; set; }
@@ -33,6 +39,17 @@ namespace ConsoleApp1
         /// </summary>
         static Dictionary<int, List<int>> Args { get; set; } = new Dictionary<int, List<int>>(); 
 
+        /// <summary>
+        /// Handle program exit with status code & log displayed
+        /// </summary>
+        /// <param name="exitCode"></param>
+        static void HandleCrashProgram(int exitCode = -1) 
+        {
+            Console.WriteLine($"Program crashed with code {exitCode}!");
+            Environment.Exit(0);
+
+            return;
+        }
         /// <summary>
         /// Hàm lấy dữ liệu của 1 dòng trong ma trận 
         /// </summary>
@@ -85,16 +102,19 @@ namespace ConsoleApp1
             if (string.IsNullOrEmpty(path))
             {
                 Console.WriteLine("Helper.ParseParams() Invalid file PATH!");
+                HandleCrashProgram();
                 return;
             }
             if (!File.Exists(path))
             {
                 Console.WriteLine($"Helper.ParseParams() File {Path.GetFullPath(path)} not found!");
+                HandleCrashProgram();
                 return;
             }
             if(inputLineSize < 1)
             {
                 Console.WriteLine("Helper.ParseParams() Invalid inputLineSize!");
+                HandleCrashProgram();
                 return; 
             }
             // Out reference number
@@ -182,11 +202,13 @@ namespace ConsoleApp1
             if(string.IsNullOrEmpty(path))
             {
                 Console.WriteLine("Helper.ReadMatrix() Invalid file PATH!"); 
+                HandleCrashProgram();
                 return false; 
             }
             if(!File.Exists(path))
             {
                 Console.WriteLine($"Helper.ReadMatrix() File {Path.GetFullPath(path)} not found!");
+                HandleCrashProgram();
                 return false;
             }
             string[] lines = File.ReadAllLines(path); 
@@ -200,8 +222,8 @@ namespace ConsoleApp1
             // Out reference number
             int number = 0;
             /* Cast chiều dài x chiều rộng của ma trận */
-            Row = (NumOfEdges > 0 ? NumOfEdges : NumOfVerticles);
-            Col = (NumOfEdges > 0 ? NumOfEdges : NumOfVerticles);
+            Row = (NumOfEdges > NumOfVerticles ? NumOfEdges : NumOfVerticles);
+            Col = (NumOfEdges > NumOfVerticles ? NumOfEdges : NumOfVerticles);
             // Khởi tạo (lại) ma trận) 
             ArrayMatrix = new int[Row, Col];
             /* Loop & insert data vào ma trận */
