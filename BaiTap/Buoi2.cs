@@ -10,8 +10,8 @@ namespace ConsoleApp1.BaiTap
         static void Bai1()
         {
             // Khởi tạo đường dẫn input/output
-            string inpFilePath = "..\\..\\Assets\\Buoi2\\AdjecencyMatrix.inp";
-            string outFilePath = "..\\..\\Assets\\Buoi2\\AdjecencyMatrix.out";
+            string inpFilePath = Helper.RELATIVE_ASSET_PATH + "Assets\\Buoi2\\AdjecencyMatrix.inp";
+            string outFilePath = Helper.RELATIVE_ASSET_PATH + "Assets\\Buoi2\\AdjecencyMatrix.out";
             // Đọc tham số của file input
             Helper.ParseParams(inpFilePath);
             // Set dữ liệu cho Helper
@@ -46,8 +46,8 @@ namespace ConsoleApp1.BaiTap
         static void Bai2()
         {
             // Khởi tạo đường dẫn input/output
-            string inpFilePath = "..\\..\\Assets\\Buoi2\\BacVaoRa.inp";
-            string outFilePath = "..\\..\\Assets\\Buoi2\\BacVaoRa.out";
+            string inpFilePath = Helper.RELATIVE_ASSET_PATH + "Assets\\Buoi2\\BacVaoRa.inp";
+            string outFilePath = Helper.RELATIVE_ASSET_PATH + "Assets\\Buoi2\\BacVaoRa.out";
             // Đọc tham số của file input
             Helper.ParseParams(inpFilePath);
             // Set dữ liệu cho Helper
@@ -108,8 +108,8 @@ namespace ConsoleApp1.BaiTap
         static void Bai3()
         {
             // Khởi tạo đường dẫn input/output
-            string inpFilePath = "..\\..\\Assets\\Buoi2\\AdjecencyList.inp";
-            string outFilePath = "..\\..\\Assets\\Buoi2\\AdjecencyList.out";
+            string inpFilePath = Helper.RELATIVE_ASSET_PATH + "Assets\\Buoi2\\AdjecencyList.inp";
+            string outFilePath = Helper.RELATIVE_ASSET_PATH + "Assets\\Buoi2\\AdjecencyList.out";
             // Đọc tham số của file input
             Helper.ParseParams(inpFilePath);
             // Set dữ liệu cho Helper
@@ -148,8 +148,8 @@ namespace ConsoleApp1.BaiTap
         static void Bai4()
         {
             // Khởi tạo đường dẫn input/output
-            string inpFilePath = "..\\..\\Assets\\Buoi2\\EdgeList.inp";
-            string outFilePath = "..\\..\\Assets\\Buoi2\\EdgeList.out";
+            string inpFilePath = Helper.RELATIVE_ASSET_PATH + "Assets\\Buoi2\\EdgeList.inp";
+            string outFilePath = Helper.RELATIVE_ASSET_PATH + "Assets\\Buoi2\\EdgeList.out";
             // Đọc tham số của file input
             Helper.ParseParams(inpFilePath);
             // Set dữ liệu cho Helper
