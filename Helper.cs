@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Configuration;
 using System.Collections.Generic;
 using ConsoleApp1.Models;
 
@@ -9,9 +10,13 @@ namespace ConsoleApp1
     public class Helper
     {
         /// <summary>
-        /// Relative asset path 
-        /// .NET Core: ..\\..\\..\\
-        /// .NET Framework: ..\\..\\
+        /// Relative asset path, ex. when running on IDE: 
+        /// <br/>
+        /// .NET Core: ..\\..\\..\\..\\
+        /// <br/>
+        /// .NET Framework: ..\\..\\..\\
+        /// <br/>
+        /// Change it on App.config => configuration => appSettings => RELATIVE_PATH_CFG
         /// </summary>
         public static string RELATIVE_ASSET_PATH = "..\\..\\..\\";
         /// <summary>
@@ -623,5 +628,33 @@ namespace ConsoleApp1
                 return null;
             }
         }
+        #region External function(s), not relate to main objectives
+        /// <summary>
+        /// Function to parse configuration(s) from App.config
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns>Parsed value by string</returns>
+        public static string ReadConfigByKey(string key)
+        {
+            if(key == null)
+            {
+                Console.WriteLine("Helper.ReadConfigByKey() Invalid params!");
+                return null;
+            }
+            string value = null; 
+            try
+            {
+                value = ConfigurationManager.AppSettings[key];
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Helper.ReadConfigByKey() uncaught exception: ");
+                Console.WriteLine(ex);
+                HandleCrashProgram();
+            }
+
+            return value;
+        }
+        #endregion
     }
 }
