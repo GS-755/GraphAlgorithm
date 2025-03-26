@@ -18,7 +18,7 @@ namespace ConsoleApp1
         /// <br/>
         /// Change it on App.config => configuration => appSettings => RELATIVE_PATH_CFG
         /// </summary>
-        public static string RELATIVE_ASSET_PATH = "..\\..\\..\\";
+        public static string RELATIVE_ASSET_PATH = ReadConfigByKey("RELATIVE_PATH_CFG");
         /// <summary>
         /// Số đỉnh của đồ thị
         /// </summary>
