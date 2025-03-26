@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="BaiTap\Buoi2.cs" />
     <Compile Include="BaiTap\Buoi3.cs" />
+    <Compile Include="BaiTap\Buoi4.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="MergeReleaseSource.cs" />
     <Compile Include="Models\Edge.cs" />
@@ -94,6 +95,10 @@
     <None Include="Assets\Buoi3\DSKe2Canh.inp" />
     <None Include="Assets\Buoi3\Ke2Canh.inp" />
     <None Include="Assets\Buoi3\TrungBinhCanh.inp" />
+    <None Include="Assets\Buoi4\BFS.inp" />
+    <None Include="Assets\Buoi4\DemLienThong.inp" />
+    <None Include="Assets\Buoi4\LienThong.inp" />
+    <None Include="Assets\Buoi4\TimDuong.inp" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

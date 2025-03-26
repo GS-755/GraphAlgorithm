@@ -28,6 +28,8 @@ namespace ConsoleApp1
                 Environment.Exit(0);
             }
             Buoi2.Run();
+            Buoi3.Run();
+            Buoi4.Run();
         }
     }
 }
