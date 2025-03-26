@@ -37,8 +37,34 @@ namespace ConsoleApp1
         /// <summary>
         /// Danh sách các tham số input  
         /// </summary>
-        static Dictionary<int, List<int>> Args { get; set; } = new Dictionary<int, List<int>>(); 
+        static Dictionary<int, List<int>> Args { get; set; } = new Dictionary<int, List<int>>();
+        /// <summary>
+        /// Tập Dictionary các đỉnh đã viếng thăm (lưu trữ toàn cục trong class Helper)
+        /// </summary>
+        static Dictionary<int, bool> VisitedVertice { get; set; }
 
+        /// <summary>
+        /// Kiểm tra nếu các đỉnh trong đồ thị đã được viếng thăm TOÀN BỘ hay chưa
+        /// </summary>
+        /// <returns>bool: Cho biết các value trong VisitedVertice: Dictionary = true hết hay chưa.</returns>
+        public static bool IsAllVerticesVisited()
+        {
+            if(VisitedVertice == null)
+            {
+                Console.WriteLine("");
+                return false; 
+            }
+            /* 
+             * Loop Dictionary & tìm ĐỈNH CHƯA VIẾNG THĂM 
+             * (Nếu có >= 1 false: return false => dừng kiểm tra)
+             */
+            if(VisitedVertice.ContainsValue(false))
+            {
+                return false; 
+            }
+
+            return true;
+        }
         /// <summary>
         /// Handle program exit with status code & log displayed
         /// </summary>
@@ -477,7 +503,7 @@ namespace ConsoleApp1
             return edgeWithSize;
         }
         /// <summary>
-        /// Init tập danh sách các đỉnh đã viếng thăm (visited) 
+        /// Khởi tạo tập danh sách các đỉnh đã viếng thăm (visited) 
         /// </summary>
         /// <param name="numOfVertice"></param>
         /// <returns>Tập danh sách các đỉnh đã viếng thăm (visited) </returns>
@@ -511,8 +537,14 @@ namespace ConsoleApp1
             }
             // Danh sách các đỉnh liên thông
             List<int> bfsResults = new List<int>();
-            // Danh sách các đỉnh đã viếng thăm 
-            Dictionary<int, bool> visitedVertice = InitVisitedDict(numOfVertice);
+            /* 
+             * Danh sách các đỉnh đã viếng thăm 
+             * (Khởi tạo nếu chưa có) 
+             */
+            if (VisitedVertice == null)
+            {
+                VisitedVertice = InitVisitedDict(numOfVertice);
+            }
             // Hàng đợi BFS
             Queue<int> bfsQueue = new Queue<int>();
             // Khởi tạo Dictionary để lưu đường đi
@@ -523,7 +555,7 @@ namespace ConsoleApp1
                 int vertice = startVertice;
                 // Enqueue đỉnh xuất phát & đánh dấu trạng thái visited = true
                 bfsQueue.Enqueue(vertice);
-                visitedVertice[vertice] = true;
+                VisitedVertice[vertice] = true;
                 // Đỉnh start => start parent = -1
                 parent[vertice] = -1;
                 // Duyệt & enqueue các đỉnh kề
@@ -568,13 +600,13 @@ namespace ConsoleApp1
                             continue;
                         }
                         // Trường hợp đỉnh đã được viếng thăm
-                        if (visitedVertice[adjVertice] == true)
+                        if (VisitedVertice[adjVertice] == true)
                         {
                             continue;
                         }
                         // Enqueue & đánh dấu visited đỉnh kề đang xét
                         bfsQueue.Enqueue(adjVertice);
-                        visitedVertice[adjVertice] = true;
+                        VisitedVertice[adjVertice] = true;
                         // Thêm đỉnh kề liên thông vào danh sách kết quả
                         bfsResults.Add(adjVertice);
                         // Lưu lại đỉnh kề trước đỉnh đang xét 

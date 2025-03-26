@@ -9,9 +9,14 @@ namespace ConsoleApp1.BaiTap
     {
         static void Bai1()
         {
-            // Đọc input ma trận 
+            // Khởi tạo đường dẫn input/output
             string inpFilePath = "..\\..\\Assets\\Buoi2\\AdjecencyMatrix.inp";
             string outFilePath = "..\\..\\Assets\\Buoi2\\AdjecencyMatrix.out";
+            // Đọc tham số của file input
+            Helper.ParseParams(inpFilePath);
+            // Set dữ liệu cho Helper
+            Helper.NumOfVerticles = Helper.GetParamsValue(0, 0);
+            // Đọc input ma trận 
             bool handleInputStatus = Helper.ReadMatrix(inpFilePath); 
             if(handleInputStatus == false)
             {
@@ -40,9 +45,14 @@ namespace ConsoleApp1.BaiTap
         }
         static void Bai2()
         {
-            // Đọc input ma trận 
+            // Khởi tạo đường dẫn input/output
             string inpFilePath = "..\\..\\Assets\\Buoi2\\BacVaoRa.inp";
             string outFilePath = "..\\..\\Assets\\Buoi2\\BacVaoRa.out";
+            // Đọc tham số của file input
+            Helper.ParseParams(inpFilePath);
+            // Set dữ liệu cho Helper
+            Helper.NumOfVerticles = Helper.GetParamsValue(0, 0);
+            // Đọc input ma trận
             bool handleInputStatus = Helper.ReadMatrix(inpFilePath);
             if (handleInputStatus == false)
             {
@@ -97,9 +107,14 @@ namespace ConsoleApp1.BaiTap
         }
         static void Bai3()
         {
-            // Đọc input ma trận 
+            // Khởi tạo đường dẫn input/output
             string inpFilePath = "..\\..\\Assets\\Buoi2\\AdjecencyList.inp";
             string outFilePath = "..\\..\\Assets\\Buoi2\\AdjecencyList.out";
+            // Đọc tham số của file input
+            Helper.ParseParams(inpFilePath);
+            // Set dữ liệu cho Helper
+            Helper.NumOfVerticles = Helper.GetParamsValue(0, 0);
+            // Đọc input ma trận 
             bool handleInputStatus = Helper.ReadMatrix(inpFilePath);
             if (handleInputStatus == false)
             {
@@ -108,6 +123,7 @@ namespace ConsoleApp1.BaiTap
             }
             // Lấy dữ liệu từ Helper
             int[,] matrix = Helper.ArrayMatrix;
+            // Lấy dữ liệu từ Helper
             int row = Helper.Row; 
             int col = Helper.Col;   
             int numOfVerticles = Helper.NumOfVerticles;
@@ -131,9 +147,15 @@ namespace ConsoleApp1.BaiTap
         }
         static void Bai4()
         {
-            // Đọc input ma trận 
+            // Khởi tạo đường dẫn input/output
             string inpFilePath = "..\\..\\Assets\\Buoi2\\EdgeList.inp";
             string outFilePath = "..\\..\\Assets\\Buoi2\\EdgeList.out";
+            // Đọc tham số của file input
+            Helper.ParseParams(inpFilePath);
+            // Set dữ liệu cho Helper
+            Helper.NumOfVerticles = Helper.GetParamsValue(0, 0);
+            Helper.NumOfEdges = Helper.GetParamsValue(0, 1);
+            // Đọc input ma trận
             bool handleInputStatus = Helper.ReadMatrix(inpFilePath);
             if (handleInputStatus == false)
             {
@@ -179,7 +201,7 @@ namespace ConsoleApp1.BaiTap
         {
             if(matrix == null || numOfVerticles == 0)
             {
-                Console.WriteLine("DegreeAdjecencyMatrix Invalid params!");
+                Console.WriteLine("Buoi2.DegreeAdjecencyMatrix() Invalid params!");
                 return null; 
             }
             int[] result = new int[numOfVerticles];
@@ -205,7 +227,7 @@ namespace ConsoleApp1.BaiTap
         {
             if (matrix == null)
             {
-                Console.WriteLine("DegreeAdjecencyList Invalid params!");
+                Console.WriteLine("Buoi2.DegreeAdjecencyList() Invalid params!");
                 return null;
             }
             int row = matrix.GetLength(0); 
@@ -236,7 +258,7 @@ namespace ConsoleApp1.BaiTap
         {
             if(matrix == null)
             {
-                Console.WriteLine("DegreeEdgeList Invalid params!");
+                Console.WriteLine("Buoi2.DegreeEdgeList() Invalid params!");
                 return null;
             }
             int row = matrix.GetLength(0); 
