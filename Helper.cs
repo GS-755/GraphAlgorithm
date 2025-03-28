@@ -49,6 +49,52 @@ namespace ConsoleApp1
         static Dictionary<int, bool> VisitedVertice { get; set; }
 
         /// <summary>
+        /// Ghi đè dữ liệu trong ma trận tại số dòng được chỉ định 
+        /// </summary>
+        /// <param name="rowIndex"></param>
+        /// <param name="sourceData"></param>
+        /// <param name="dataToReplace"></param>
+        /// <param name="flgPrintMatrix"></param>
+        /// <returns>bool: Kết quả ghi đè dữ liệu</returns>
+        public static bool OverrideMatrixData(int rowIndex, int sourceData, int dataToReplace = 0, bool flgPrintMatrix = true)
+        {
+            if(rowIndex < 0)
+            {
+                Console.WriteLine("Helper.OverrideMatrixData() Invalid params!");
+                return false;
+            }
+            int expectedRowIndex = rowIndex - 1;
+            try
+            {
+                // Get matrix row data by rowIndex
+                List<int> lstMatrixRow = GetMatrixRow(expectedRowIndex);
+                if (lstMatrixRow == null)
+                {
+                    Console.WriteLine($"Helper.OverrideMatrixData() rowIndex = {expectedRowIndex} get matrix row failed!");
+                    return false;
+                }
+                // Find data & replace by matching row & column index
+                int colIndexToReplace = lstMatrixRow.FindIndex(k => (k > 0) && (k == sourceData));
+                ArrayMatrix[expectedRowIndex, colIndexToReplace] = dataToReplace;
+                // Print matrix if flag flgPrintMatrix == true
+                if(flgPrintMatrix == true)
+                {
+                    Console.WriteLine($"Helper.OverrideMatrixData() overriden matrix data at [Row = {expectedRowIndex}, Col = {colIndexToReplace}]");
+                    Console.WriteLine("Current matrix: ");
+                    PrintMatrix();
+                }
+
+                return true;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Helper.OverrideMatrixData() unhandled exception: ");
+                Console.WriteLine(ex);
+
+                return false;
+            }
+        }
+        /// <summary>
         /// Kiểm tra nếu các đỉnh trong đồ thị đã được viếng thăm TOÀN BỘ hay chưa
         /// </summary>
         /// <returns>bool: Cho biết các value trong VisitedVertice: Dictionary = true hết hay chưa.</returns>
@@ -69,6 +115,18 @@ namespace ConsoleApp1
             }
 
             return true;
+        }
+        /// <summary>
+        /// Gỡ bỏ đối tượng Helper.VistedVertices (null)
+        /// </summary>
+        public static void ClearVisitedVerticesDict()
+        {
+            if(VisitedVertice == null)
+            {
+                Console.WriteLine("Helper.ClearDictVisitedVertices() VisitedVertice is not initialized!");
+                return;
+            }
+            VisitedVertice = null;
         }
         /// <summary>
         /// Handle program exit with status code & log displayed
@@ -100,7 +158,7 @@ namespace ConsoleApp1
             }
             if(rowIndex > NumOfVerticles)
             {
-                Console.WriteLine("Helper.GetMatrixRow() invalid internal matrix row index!");
+                Console.WriteLine("Helper.GetMatrixRow() invalid internal matrix row rowIndex!");
                 return null;
             }
             try
@@ -172,7 +230,7 @@ namespace ConsoleApp1
                         bool tryParseParam = int.TryParse(arrParams[j], out number);
                         if (tryParseParam == false)
                         {
-                            Console.WriteLine($"Helper.ReadMatrix() Params index [i = {i + 1}, j = {j + 1}] failed!");
+                            Console.WriteLine($"Helper.ReadMatrix() Params rowIndex [i = {i + 1}, j = {j + 1}] failed!");
                             continue;
                         }
                         // Thêm params vào danh sách tạm 
@@ -302,13 +360,12 @@ namespace ConsoleApp1
         /// <summary>
         /// In ma trận ra console 
         /// </summary>
-        /// <returns></returns>
-        static bool PrintMatrix()
+        static void PrintMatrix()
         {
             if(ArrayMatrix == null)
             {
                 Console.WriteLine("PrintMatrix invalid params!");
-                return false; 
+                return; 
             }
             for(int i = 0; i < Row; i++)
             {
@@ -320,8 +377,6 @@ namespace ConsoleApp1
                 Console.WriteLine();    
             }
             Console.WriteLine();
-
-            return true; 
         }
         /// <summary>
         /// Convert Danh sách cạnh => Danh sách kề

@@ -56,6 +56,74 @@ namespace ConsoleApp1.BaiTap
                 }
             }
         }
+        static void Bai2()
+        {
+            // Khởi tạo đường dẫn input/output
+            string inpFilePath = Helper.RELATIVE_ASSET_PATH + "Assets\\Buoi5\\CanhCau.inp";
+            string outFilePath = Helper.RELATIVE_ASSET_PATH + "Assets\\Buoi5\\CanhCau.out";
+            // Đọc tham số của file input
+            Helper.ParseParams(inpFilePath);
+            // Set dữ liệu cho Helper
+            Helper.NumOfVerticles = Helper.GetParamsValue(0, 0);
+            // Đọc input ma trận
+            bool handleInputStatus = Helper.ReadMatrix(inpFilePath);
+            if (handleInputStatus == false)
+            {
+                Console.WriteLine("Buoi5.Bai2() Invalid input data!");
+                return;
+            }
+            // Lấy dữ liệu từ Helper
+            int[,] matrix = Helper.ArrayMatrix;
+            int numOfVerticles = Helper.NumOfVerticles;
+            int verticeToRemove = Helper.GetParamsValue(0, 1);
+            int nextVertice = Helper.GetParamsValue(0, 2);
+            /*
+             * Bước 1: Duyệt BFS các đỉnh nguồn KHÔNG xác định 
+             * Từ 1 -> numOfVerticles
+             * TRƯỚC KHI GỠ CẠNH THEO YÊU CẦU ĐỀ BÀI
+             */
+            List<List<int>> step1Result = scanConnectedGraphs(matrix, numOfVerticles);
+            if (step1Result == null)
+            {
+                Console.WriteLine("Buoi5.Bai2() - Step 1 - Invalid output data!");
+                return;
+            }
+            // Gỡ bỏ cạnh từ danh sách kề - theo yêu cầu đề bài 
+            bool removeEdgeStatus = Helper.OverrideMatrixData(verticeToRemove, nextVertice);
+            if (removeEdgeStatus == false)
+            {
+                Console.WriteLine($"Buoi5.Bai2() remove Edge[{verticeToRemove} - {nextVertice}] failed!");
+                return;
+            }
+            /*
+             * Bước 2: Duyệt BFS các đỉnh nguồn KHÔNG xác định 
+             * Từ 1 -> numOfVerticles
+             * SAU KHI GỠ CẠNH THEO YÊU CẦU ĐỀ BÀI
+             */
+            // Patch lại dữ liệu ma trận đã chỉnh sửa vào biến cục bộ matrix[,]
+            matrix = Helper.ArrayMatrix;
+            List<List<int>> step2Result = scanConnectedGraphs(matrix, numOfVerticles);
+            if (step2Result == null)
+            {
+                Console.WriteLine("Buoi5.Bai2() - Step 2 - Invalid output data!");
+                return;
+            }
+            /* 
+             * Bước 3: Lấy số miền liên thông đồ thị của Bước 1 và 2
+             * Kiểm tra xem sau khi gỡ cạnh theo đề bài
+             * thì có xuất hiện cạnh cầu không
+             */
+            int cntGraphStep1 = step1Result.Count;
+            int cntGraphStep2 = step2Result.Count;
+            string finalResult = (cntGraphStep2 > cntGraphStep1) ? "YES" : "NO";
+            // Xuất kết quả bài 2
+            using (StreamWriter sw = new StreamWriter(outFilePath))
+            {
+                // In ra kết quả: Sau khi gỡ cạnh theo đề bài thì 
+                // cạnh đó có phải cạnh cầu hay không?
+                sw.WriteLine(finalResult); 
+            }
+        }
         /// <summary>
         /// Duyệt BFS các đỉnh để tìm các miền liên thông 
         /// </summary>
@@ -125,12 +193,15 @@ namespace ConsoleApp1.BaiTap
 
                 return null;
             }
+            // Reset Dictionary các đỉnh đã viếng thăm 
+            Helper.ClearVisitedVerticesDict();
 
             return lstConnectedGraph;
         }
         public static void Run()
         {
             Bai1();
+            Bai2();
         }
     }
 }

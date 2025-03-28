@@ -104,6 +104,7 @@
     <None Include="Assets\Buoi4\DemLienThong.inp" />
     <None Include="Assets\Buoi4\LienThong.inp" />
     <None Include="Assets\Buoi4\TimDuong.inp" />
+    <None Include="Assets\Buoi5\CanhCau.inp" />
     <None Include="Assets\Buoi5\MienLienThongBFS.inp" />
     <None Include="packages.config" />
   </ItemGroup>
