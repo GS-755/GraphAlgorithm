@@ -12,9 +12,9 @@ namespace ConsoleApp1
         /// <summary>
         /// Relative asset path, ex. when running on IDE: 
         /// <br/>
-        /// .NET Core: ..\\..\\..\\..\\
+        /// .NET Core: ..\\..\\..\\
         /// <br/>
-        /// .NET Framework: ..\\..\\..\\
+        /// .NET Framework: ..\\..\\
         /// <br/>
         /// Change it on App.config => configuration => appSettings => RELATIVE_PATH_CFG
         /// </summary>
