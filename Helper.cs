@@ -3,7 +3,9 @@ using System.IO;
 using System.Linq;
 using System.Configuration;
 using System.Collections.Generic;
+
 using ConsoleApp1.Models;
+using ConsoleApp1.Models.Utils;
 
 namespace ConsoleApp1
 {
@@ -51,19 +53,21 @@ namespace ConsoleApp1
         /// <summary>
         /// Ghi đè dữ liệu trong ma trận tại số dòng được chỉ định 
         /// </summary>
-        /// <param name="rowIndex"></param>
-        /// <param name="sourceData"></param>
-        /// <param name="dataToReplace"></param>
-        /// <param name="flgPrintMatrix"></param>
+        /// <param name="paramObj"></param>
         /// <returns>bool: Kết quả ghi đè dữ liệu</returns>
-        public static bool OverrideMatrixData(int rowIndex, int sourceData, int dataToReplace = 0, bool flgPrintMatrix = true)
+        public static bool OverrideMatrixData(OverrideMatrixParams paramObj)
         {
-            if(rowIndex < 0)
+            if(paramObj == null)
             {
                 Console.WriteLine("Helper.OverrideMatrixData() Invalid params!");
                 return false;
             }
-            int expectedRowIndex = rowIndex - 1;
+            if (paramObj.RowIndex < 0)
+            {
+                Console.WriteLine("Helper.OverrideMatrixData() Invalid params!");
+                return false;
+            }
+            int expectedRowIndex = paramObj.RowIndex <= 0 ? paramObj.RowIndex : paramObj.RowIndex - 1;
             try
             {
                 // Get matrix row data by rowIndex
@@ -73,13 +77,38 @@ namespace ConsoleApp1
                     Console.WriteLine($"Helper.OverrideMatrixData() rowIndex = {expectedRowIndex} get matrix row failed!");
                     return false;
                 }
-                // Find data & replace by matching row & column index
-                int colIndexToReplace = lstMatrixRow.FindIndex(k => (k > 0) && (k == sourceData));
-                ArrayMatrix[expectedRowIndex, colIndexToReplace] = dataToReplace;
-                // Print matrix if flag flgPrintMatrix == true
-                if(flgPrintMatrix == true)
+                // Remove data of a row: Replace all data in specified RowIndex to 0
+                if (paramObj.RemoveAllLines == true)
                 {
+                    int lstSize = lstMatrixRow.Count;
+                    for (int i = 0; i < lstSize; i++)
+                    {
+                        ArrayMatrix[expectedRowIndex, i] = 0;
+                    }
+                    Console.WriteLine($"Helper.OverrideMatrixData() cleared matrix data at [Row = {expectedRowIndex}]");
+                }
+                else
+                {
+                    // Find data & replace by matching row & column index
+                    int colIndexToReplace = -1;
+                    if (paramObj.SourceData > 0)
+                    {
+                        colIndexToReplace = lstMatrixRow.FindIndex(k => (k > 0) && (k == paramObj.SourceData));
+                    }
+                    if (paramObj.ColIndex > 0)
+                    {
+                        colIndexToReplace = paramObj.ColIndex;
+                    }
+                    if(colIndexToReplace < 0)
+                    {
+                        return false;
+                    }
+                    ArrayMatrix[expectedRowIndex, colIndexToReplace] = paramObj.DataToReplace; 
                     Console.WriteLine($"Helper.OverrideMatrixData() overriden matrix data at [Row = {expectedRowIndex}, Col = {colIndexToReplace}]");
+                }
+                // Print matrix if flag flgPrintMatrix == true
+                if (paramObj.FlgPrintMatrix == true)
+                {
                     Console.WriteLine("Current matrix: ");
                     PrintMatrix();
                 }
@@ -263,7 +292,7 @@ namespace ConsoleApp1
         {
             if(Args == null)
             {
-                Console.WriteLine($"Helper.GetParamsValue() Invalid args data!");
+                Console.WriteLine($"Helper.GetParamsValue() Invalid paramObj data!");
                 return -1; 
             }
             try

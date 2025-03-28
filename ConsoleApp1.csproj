@@ -84,6 +84,7 @@
     <Compile Include="BaiTap\Buoi5.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="MergeReleaseSource.cs" />
+    <Compile Include="Models\Utils\OverrideMatrixParams.cs" />
     <Compile Include="Models\Edge.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
