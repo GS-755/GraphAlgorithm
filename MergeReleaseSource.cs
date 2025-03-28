@@ -92,6 +92,7 @@ namespace ConsoleApp1
                     writer.WriteLine("using System;");
                     writer.WriteLine("using System.IO;");
                     writer.WriteLine("using System.Linq;");
+                    writer.WriteLine("using System.Configuration;");
                     writer.WriteLine("using System.Collections.Generic;");
                     writer.WriteLine();
                     writer.WriteLine("using Microsoft.CodeAnalysis;");
