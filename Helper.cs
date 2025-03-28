@@ -527,13 +527,44 @@ namespace ConsoleApp1
             return visitedDict;
         }
         /// <summary>
+        /// Kiểm tra đỉnh đang xét đã được viếng thăm hay chưa
+        /// </summary>
+        /// <param name="vertice"></param>
+        /// <returns>Trạng thái viếng thăm của đỉnh đang xét</returns>
+        /// <exception cref="NullReferenceException"></exception>
+        public static bool IsVerticeVisited(int vertice)
+        {
+            if(vertice <= 0)
+            {
+                Console.WriteLine("Helper.IsVerticeVisited() Invalid params!");
+                return false;
+            }
+            if(VisitedVertice == null)
+            {
+                throw new NullReferenceException("Helper.VisitedVertice is not initialized!");
+            }
+            // Init out boolean reference: VisitedVertice try get key status 
+            bool tryGetDictValueResult = false;
+            // Try to get value from dictionary 
+            VisitedVertice.TryGetValue(vertice, out tryGetDictValueResult);
+            if(tryGetDictValueResult == false)
+            {
+                return false; 
+            }
+
+            // Return value result of searched key 
+            return VisitedVertice[vertice];
+        } 
+        /// <summary>
         /// Duyệt đồ thị theo chiều ngang (Breadth First Search a.k.a BFS)
         /// </summary>
         /// <param name="matrix"></param>
         /// <param name="numOfVertice"></param>
         /// <param name="startVertice"></param>
+        /// <param name="endVertice"></param>
+        /// <param name="insertStartVertice"></param>
         /// <returns>Danh sách các miền liên thông đã duyệt từ đỉnh startVertice</returns>
-        public static List<int> BFS(int[,] matrix, int numOfVertice, int startVertice, int endVertice = 0)
+        public static List<int> BFS(int[,] matrix, int numOfVertice, int startVertice, int endVertice = 0, bool insertStartVertice = false)
         {
             if(matrix == null || numOfVertice == 0 || startVertice == 0)
             {
@@ -556,13 +587,16 @@ namespace ConsoleApp1
             Dictionary<int, int> parent = new Dictionary<int, int>();
             try
             {
-                // Đỉnh xuất phát
-                int vertice = startVertice;
                 // Enqueue đỉnh xuất phát & đánh dấu trạng thái visited = true
-                bfsQueue.Enqueue(vertice);
-                VisitedVertice[vertice] = true;
+                bfsQueue.Enqueue(startVertice);
+                VisitedVertice[startVertice] = true;
+                // Nếu flag insertStartVertice = true: insert đỉnh start vào kết quả BFS 
+                if(insertStartVertice == true)
+                {
+                    bfsResults.Add(startVertice);
+                }
                 // Đỉnh start => start parent = -1
-                parent[vertice] = -1;
+                parent[startVertice] = -1;
                 // Duyệt & enqueue các đỉnh kề
                 while (bfsQueue.Count > 0)
                 {
