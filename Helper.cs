@@ -3,7 +3,9 @@ using System.IO;
 using System.Linq;
 using System.Configuration;
 using System.Collections.Generic;
+
 using ConsoleApp1.Models;
+using ConsoleApp1.Models.Utils;
 
 namespace ConsoleApp1
 {
@@ -49,6 +51,79 @@ namespace ConsoleApp1
         static Dictionary<int, bool> VisitedVertice { get; set; }
 
         /// <summary>
+        /// Ghi đè dữ liệu trong ma trận tại số dòng được chỉ định 
+        /// </summary>
+        /// <param name="paramObj"></param>
+        /// <returns>bool: Kết quả ghi đè dữ liệu</returns>
+        public static bool OverrideMatrixData(OverrideMatrixParams paramObj)
+        {
+            if(paramObj == null)
+            {
+                Console.WriteLine("Helper.OverrideMatrixData() Invalid params!");
+                return false;
+            }
+            if (paramObj.RowIndex < 0)
+            {
+                Console.WriteLine("Helper.OverrideMatrixData() Invalid params!");
+                return false;
+            }
+            int expectedRowIndex = paramObj.RowIndex <= 0 ? paramObj.RowIndex : paramObj.RowIndex - 1;
+            try
+            {
+                // Get matrix row data by rowIndex
+                List<int> lstMatrixRow = GetMatrixRow(expectedRowIndex);
+                if (lstMatrixRow == null)
+                {
+                    Console.WriteLine($"Helper.OverrideMatrixData() rowIndex = {expectedRowIndex} get matrix row failed!");
+                    return false;
+                }
+                // Remove data of a row: Replace all data in specified RowIndex to 0
+                if (paramObj.RemoveAllLines == true)
+                {
+                    int lstSize = lstMatrixRow.Count;
+                    for (int i = 0; i < lstSize; i++)
+                    {
+                        ArrayMatrix[expectedRowIndex, i] = 0;
+                    }
+                    Console.WriteLine($"Helper.OverrideMatrixData() cleared matrix data at [Row = {expectedRowIndex}]");
+                }
+                else
+                {
+                    // Find data & replace by matching row & column index
+                    int colIndexToReplace = -1;
+                    if (paramObj.SourceData > 0)
+                    {
+                        colIndexToReplace = lstMatrixRow.FindIndex(k => (k > 0) && (k == paramObj.SourceData));
+                    }
+                    if (paramObj.ColIndex > 0)
+                    {
+                        colIndexToReplace = paramObj.ColIndex;
+                    }
+                    if(colIndexToReplace < 0)
+                    {
+                        return false;
+                    }
+                    ArrayMatrix[expectedRowIndex, colIndexToReplace] = paramObj.DataToReplace; 
+                    Console.WriteLine($"Helper.OverrideMatrixData() overriden matrix data at [Row = {expectedRowIndex}, Col = {colIndexToReplace}]");
+                }
+                // Print matrix if flag flgPrintMatrix == true
+                if (paramObj.FlgPrintMatrix == true)
+                {
+                    Console.WriteLine("Current matrix: ");
+                    PrintMatrix();
+                }
+
+                return true;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Helper.OverrideMatrixData() unhandled exception: ");
+                Console.WriteLine(ex);
+
+                return false;
+            }
+        }
+        /// <summary>
         /// Kiểm tra nếu các đỉnh trong đồ thị đã được viếng thăm TOÀN BỘ hay chưa
         /// </summary>
         /// <returns>bool: Cho biết các value trong VisitedVertice: Dictionary = true hết hay chưa.</returns>
@@ -69,6 +144,18 @@ namespace ConsoleApp1
             }
 
             return true;
+        }
+        /// <summary>
+        /// Gỡ bỏ đối tượng Helper.VistedVertices (null)
+        /// </summary>
+        public static void ClearVisitedVerticesDict()
+        {
+            if(VisitedVertice == null)
+            {
+                Console.WriteLine("Helper.ClearDictVisitedVertices() VisitedVertice is not initialized!");
+                return;
+            }
+            VisitedVertice = null;
         }
         /// <summary>
         /// Handle program exit with status code & log displayed
@@ -100,7 +187,7 @@ namespace ConsoleApp1
             }
             if(rowIndex > NumOfVerticles)
             {
-                Console.WriteLine("Helper.GetMatrixRow() invalid internal matrix row index!");
+                Console.WriteLine("Helper.GetMatrixRow() invalid internal matrix row rowIndex!");
                 return null;
             }
             try
@@ -172,7 +259,7 @@ namespace ConsoleApp1
                         bool tryParseParam = int.TryParse(arrParams[j], out number);
                         if (tryParseParam == false)
                         {
-                            Console.WriteLine($"Helper.ReadMatrix() Params index [i = {i + 1}, j = {j + 1}] failed!");
+                            Console.WriteLine($"Helper.ReadMatrix() Params rowIndex [i = {i + 1}, j = {j + 1}] failed!");
                             continue;
                         }
                         // Thêm params vào danh sách tạm 
@@ -205,7 +292,7 @@ namespace ConsoleApp1
         {
             if(Args == null)
             {
-                Console.WriteLine($"Helper.GetParamsValue() Invalid args data!");
+                Console.WriteLine($"Helper.GetParamsValue() Invalid paramObj data!");
                 return -1; 
             }
             try
@@ -302,13 +389,12 @@ namespace ConsoleApp1
         /// <summary>
         /// In ma trận ra console 
         /// </summary>
-        /// <returns></returns>
-        static bool PrintMatrix()
+        static void PrintMatrix()
         {
             if(ArrayMatrix == null)
             {
                 Console.WriteLine("PrintMatrix invalid params!");
-                return false; 
+                return; 
             }
             for(int i = 0; i < Row; i++)
             {
@@ -320,8 +406,6 @@ namespace ConsoleApp1
                 Console.WriteLine();    
             }
             Console.WriteLine();
-
-            return true; 
         }
         /// <summary>
         /// Convert Danh sách cạnh => Danh sách kề
@@ -527,13 +611,44 @@ namespace ConsoleApp1
             return visitedDict;
         }
         /// <summary>
+        /// Kiểm tra đỉnh đang xét đã được viếng thăm hay chưa
+        /// </summary>
+        /// <param name="vertice"></param>
+        /// <returns>Trạng thái viếng thăm của đỉnh đang xét</returns>
+        /// <exception cref="NullReferenceException"></exception>
+        public static bool IsVerticeVisited(int vertice)
+        {
+            if(vertice <= 0)
+            {
+                Console.WriteLine("Helper.IsVerticeVisited() Invalid params!");
+                return false;
+            }
+            if(VisitedVertice == null)
+            {
+                throw new NullReferenceException("Helper.VisitedVertice is not initialized!");
+            }
+            // Init out boolean reference: VisitedVertice try get key status 
+            bool tryGetDictValueResult = false;
+            // Try to get value from dictionary 
+            VisitedVertice.TryGetValue(vertice, out tryGetDictValueResult);
+            if(tryGetDictValueResult == false)
+            {
+                return false; 
+            }
+
+            // Return value result of searched key 
+            return VisitedVertice[vertice];
+        } 
+        /// <summary>
         /// Duyệt đồ thị theo chiều ngang (Breadth First Search a.k.a BFS)
         /// </summary>
         /// <param name="matrix"></param>
         /// <param name="numOfVertice"></param>
         /// <param name="startVertice"></param>
+        /// <param name="endVertice"></param>
+        /// <param name="insertStartVertice"></param>
         /// <returns>Danh sách các miền liên thông đã duyệt từ đỉnh startVertice</returns>
-        public static List<int> BFS(int[,] matrix, int numOfVertice, int startVertice, int endVertice = 0)
+        public static List<int> BFS(int[,] matrix, int numOfVertice, int startVertice, int endVertice = 0, bool insertStartVertice = false)
         {
             if(matrix == null || numOfVertice == 0 || startVertice == 0)
             {
@@ -556,13 +671,16 @@ namespace ConsoleApp1
             Dictionary<int, int> parent = new Dictionary<int, int>();
             try
             {
-                // Đỉnh xuất phát
-                int vertice = startVertice;
                 // Enqueue đỉnh xuất phát & đánh dấu trạng thái visited = true
-                bfsQueue.Enqueue(vertice);
-                VisitedVertice[vertice] = true;
+                bfsQueue.Enqueue(startVertice);
+                VisitedVertice[startVertice] = true;
+                // Nếu flag insertStartVertice = true: insert đỉnh start vào kết quả BFS 
+                if(insertStartVertice == true)
+                {
+                    bfsResults.Add(startVertice);
+                }
                 // Đỉnh start => start parent = -1
-                parent[vertice] = -1;
+                parent[startVertice] = -1;
                 // Duyệt & enqueue các đỉnh kề
                 while (bfsQueue.Count > 0)
                 {
