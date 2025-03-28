@@ -31,6 +31,7 @@ namespace ConsoleApp1
             Buoi3.Run();
             Buoi4.Run();
             Buoi5.Run();
+            Buoi6.Run();
         }
     }
 }

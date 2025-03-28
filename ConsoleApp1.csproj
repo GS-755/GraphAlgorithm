@@ -82,6 +82,7 @@
     <Compile Include="BaiTap\Buoi3.cs" />
     <Compile Include="BaiTap\Buoi4.cs" />
     <Compile Include="BaiTap\Buoi5.cs" />
+    <Compile Include="BaiTap\Buoi6.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="MergeReleaseSource.cs" />
     <Compile Include="Models\Utils\OverrideMatrixParams.cs" />
@@ -107,11 +108,13 @@
     <None Include="Assets\Buoi4\TimDuong.inp" />
     <None Include="Assets\Buoi5\CanhCau.inp" />
     <None Include="Assets\Buoi5\MienLienThongBFS.inp" />
+    <None Include="Assets\Buoi6\DFS.inp" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="packages\Microsoft.CodeAnalysis.Analyzers.3.11.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="packages\Microsoft.CodeAnalysis.Analyzers.3.11.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -746,6 +746,81 @@ namespace ConsoleApp1
                 return null;
             }
         }
+        /// <summary>
+        /// Duyệt đồ thị theo chiều sâu (Depth First Search a.k.a DFS)
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <param name="numOfVertice"></param>
+        /// <param name="startVertice"></param>
+        /// <returns>Danh sách các đỉnh kề đã duyệt từ đỉnh startVertice</returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public static List<int> DFS(int[,] matrix, int numOfVertice, int startVertice)
+        {
+            if (matrix == null || numOfVertice == 0 || startVertice == 0)
+            {
+                Console.WriteLine("Helper.BFS() Invalid params!");
+                return null;
+            }
+            // Danh sách các đỉnh liên thông
+            List<int> dfsResults = null;
+            /* 
+             * Danh sách các đỉnh đã viếng thăm 
+             * (Khởi tạo nếu chưa có) 
+             */
+            if (VisitedVertice == null)
+            {
+                VisitedVertice = InitVisitedDict(numOfVertice);
+            }
+            // Khởi tạo Stack DFS 
+            Stack<int> dfsStack = new Stack<int>();
+            try
+            {
+                // Khởi tạo danh sách kết quả DFS
+                dfsResults = new List<int>();
+                // Đưa đỉnh startVertice vào Stack 
+                dfsStack.Push(startVertice);
+                while (dfsStack.Count > 0)
+                {
+                    // Lấy đỉnh đã viếng thăm ra khỏi Stack 
+                    int popItem = dfsStack.Pop();
+                    if(Helper.IsVerticeVisited(popItem))
+                    {
+                        continue;
+                    }
+                    VisitedVertice[popItem] = true;
+                    // Lấy các đỉnh kề của đỉnh popItem
+                    List<int> adjLst = Helper.GetMatrixRow(popItem - 1);
+                    if (adjLst == null)
+                    {
+                        Console.WriteLine($"Helper.DFS() Vertice #{popItem} no adjacency vertice found!");
+                        continue;
+                    }
+                    // Lọc các đỉnh không hợp lệ (<= 0)
+                    adjLst = adjLst.Where(k => k > 0).ToList();
+                    // Đưa vào Stack các đỉnh kề của popItem 
+                    foreach (int item in adjLst)
+                    {
+                        // Trường hợp đỉnh đã được viếng thăm: skip 
+                        if (Helper.IsVerticeVisited(item))
+                        {
+                            continue;
+                        }
+                        dfsStack.Push(item);
+                        // Thêm đỉnh đã viếng thăm vào danh sách kết quả 
+                        dfsResults.Add(item);
+                    }
+                }
+
+                return dfsResults;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Helper.DFS() unhandled exception: ");
+                Console.WriteLine(ex);
+
+                return null;
+            }
+        }
         #region External function(s), not relate to main objectives
         /// <summary>
         /// Function to parse configuration(s) from App.config
@@ -772,6 +847,24 @@ namespace ConsoleApp1
             }
 
             return value;
+        }
+        /// <summary>
+        /// Check if input integer list is invalid
+        /// </summary>
+        /// <param name="lst"></param>
+        /// <returns>Bool: Integer list validation result</returns>
+        public static bool CheckInvalidList(List<int> lst)
+        {
+            if(lst == null)
+            {
+                return false; 
+            }
+            if(lst.Count == 0)
+            {
+                return false; 
+            }
+
+            return true; 
         }
         #endregion
     }
