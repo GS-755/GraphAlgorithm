@@ -161,7 +161,7 @@ namespace ConsoleApp1.BaiTap
             foreach (int item in lstStartVertice)
             {
                 // Duyệt BFS đồ thị bằng đỉnh bắt đầu đang xét 
-                List<int> bfsResult = Helper.BFS(matrix, numOfVerticles, item);
+                List<int> bfsResult = Helper.BFS(matrix, numOfVerticles, item, 0, true);
                 if (bfsResult == null)
                 {
                     Console.WriteLine($"Buoi4.Bai4() BFS vertice = {item} failed!");
